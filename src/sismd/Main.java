@@ -9,15 +9,19 @@ import sismd.filters.HistogramEqualizer;
 import sismd.filters.MultithreadedFilter;
 import sismd.filters.SequentialFilter;
 import sismd.filters.ThreadPoolFilter;
+import sismd.utils.ImagePaths;
 import sismd.utils.Utils;
 
 /**
  * Central entry point for the SISMD Histogram Equalization project.
  *
+ * Input images:  images/in/
+ * Output images: images/out/
+ *
  * Usage:
- *   java sismd.Main                          -> interactive menu
- *   java sismd.Main benchmark [image]        -> run full benchmark directly
- *   java sismd.Main apply [image] [output]   -> apply all filters and save outputs
+ *   java sismd.Main                                  -> interactive menu
+ *   java sismd.Main benchmark [image]                -> full benchmark
+ *   java sismd.Main apply <image> <output> [filter] [threads]
  */
 public class Main {
 
@@ -34,40 +38,44 @@ public class Main {
     // ------------------------------------------------------------------ //
 
     private static void runMenu() {
-        Scanner sc = new Scanner(System.in);
-        boolean running = true;
+        try (Scanner sc = new Scanner(System.in)) {
+            boolean running = true;
 
-        while (running) {
-            System.out.println();
-            System.out.println("==============================================");
-            System.out.println("  Histogram Equalization - SISMD 2025/26");
-            System.out.println("==============================================");
-            System.out.println("  1. Run full benchmark");
-            System.out.println("  2. Apply a filter and save image");
-            System.out.println("  3. Apply ALL filters and save images");
-            System.out.println("  0. Exit");
-            System.out.println("----------------------------------------------");
-            System.out.print("  Choice: ");
+            while (running) {
+                System.out.println();
+                System.out.println("==============================================");
+                System.out.println("  Histogram Equalization - SISMD 2025/26");
+                System.out.println("==============================================");
+                System.out.println("  Input  dir: " + ImagePaths.INPUT_DIR);
+                System.out.println("  Output dir: " + ImagePaths.OUTPUT_DIR);
+                System.out.println("----------------------------------------------");
+                System.out.println("  1. Run full benchmark");
+                System.out.println("  2. Apply a filter and save image");
+                System.out.println("  3. Apply ALL filters and save images");
+                System.out.println("  0. Exit");
+                System.out.println("----------------------------------------------");
+                System.out.print("  Choice: ");
 
-            switch (sc.nextLine().trim()) {
-                case "1" -> menuBenchmark(sc);
-                case "2" -> menuApplySingle(sc);
-                case "3" -> menuApplyAll(sc);
-                case "0" -> running = false;
-                default  -> System.out.println("  Invalid option.");
+                switch (sc.nextLine().trim()) {
+                    case "1" -> menuBenchmark(sc);
+                    case "2" -> menuApplySingle(sc);
+                    case "3" -> menuApplyAll(sc);
+                    case "0" -> running = false;
+                    default  -> System.out.println("  Invalid option.");
+                }
             }
         }
-        sc.close();
     }
 
     private static void menuBenchmark(Scanner sc) {
-        String img = prompt(sc, "Image path", "src.jpg");
+        String img = prompt(sc, "Image path", ImagePaths.DEFAULT_INPUT);
         System.out.println();
         Benchmark.main(new String[]{ img });
     }
 
     private static void menuApplySingle(Scanner sc) {
-        String img = prompt(sc, "Image path", "src.jpg");
+        String img = prompt(sc, "Image path", ImagePaths.DEFAULT_INPUT);
+        String stem = ImagePaths.stem(img);
 
         System.out.println();
         System.out.println("  Implementations:");
@@ -85,13 +93,15 @@ public class Main {
             threads = Integer.parseInt(prompt(sc, "Number of threads", "4"));
         }
 
-        String out = prompt(sc, "Output file", "output.jpg");
+        String defaultOut = ImagePaths.output(stem + "_output.jpg");
+        String out = prompt(sc, "Output file", defaultOut);
         applyAndSave(buildFilter(choice, threads), img, out);
     }
 
     private static void menuApplyAll(Scanner sc) {
-        String img    = prompt(sc, "Image path", "src.jpg");
+        String img    = prompt(sc, "Image path", ImagePaths.DEFAULT_INPUT);
         int    threads = Integer.parseInt(prompt(sc, "Threads for parallel filters", "4"));
+        String stem   = ImagePaths.stem(img);
 
         System.out.println();
         Color[][] image = Utils.loadImage(img);
@@ -103,22 +113,19 @@ public class Main {
             new ForkJoinFilter(),
             new CompletableFutureFilter(threads)
         };
-        String[] outputs = {
-            "output_sequential.jpg",
-            "output_multithreaded.jpg",
-            "output_threadpool.jpg",
-            "output_forkjoin.jpg",
-            "output_completable.jpg"
+        String[] suffixes = {
+            "sequential", "multithreaded", "threadpool", "forkjoin", "completable"
         };
 
         for (int i = 0; i < filters.length; i++) {
-            long t0     = System.nanoTime();
-            Color[][] r = filters[i].apply(image);
-            long ms     = (System.nanoTime() - t0) / 1_000_000;
-            Utils.writeImage(r, outputs[i]);
-            System.out.printf("  [%3d ms]  %-38s -> %s%n", ms, filters[i].getName(), outputs[i]);
+            String outPath = ImagePaths.output(stem + "_" + suffixes[i] + ".jpg");
+            long t0        = System.nanoTime();
+            Color[][] r    = filters[i].apply(image);
+            long ms        = (System.nanoTime() - t0) / 1_000_000;
+            Utils.writeImage(r, outPath);
+            System.out.printf("  [%3d ms]  %-38s -> %s%n", ms, filters[i].getName(), outPath);
         }
-        System.out.println("\n  All outputs saved.");
+        System.out.println("\n  All outputs saved to " + ImagePaths.OUTPUT_DIR);
     }
 
     // ------------------------------------------------------------------ //
@@ -128,7 +135,7 @@ public class Main {
     private static void runCommand(String[] args) {
         switch (args[0].toLowerCase()) {
             case "benchmark" -> {
-                String img = args.length > 1 ? args[1] : "src.jpg";
+                String img = args.length > 1 ? args[1] : ImagePaths.DEFAULT_INPUT;
                 Benchmark.main(new String[]{ img });
             }
             case "apply" -> {
@@ -154,9 +161,9 @@ public class Main {
         System.out.println("\n  Loading: " + imgPath);
         Color[][] image = Utils.loadImage(imgPath);
         System.out.print("  Running: " + filter.getName() + " ... ");
-        long t0       = System.nanoTime();
-        Color[][] r   = filter.apply(image);
-        long ms       = (System.nanoTime() - t0) / 1_000_000;
+        long t0     = System.nanoTime();
+        Color[][] r = filter.apply(image);
+        long ms     = (System.nanoTime() - t0) / 1_000_000;
         Utils.writeImage(r, outPath);
         System.out.printf("done (%d ms)%n", ms);
         System.out.println("  Saved:   " + outPath);

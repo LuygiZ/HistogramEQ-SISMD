@@ -9,16 +9,18 @@ import sismd.filters.HistogramEqualizer;
 import sismd.filters.MultithreadedFilter;
 import sismd.filters.SequentialFilter;
 import sismd.filters.ThreadPoolFilter;
+import sismd.utils.ImagePaths;
 import sismd.utils.Utils;
 
 /**
  * Runs all histogram equalization implementations and prints a performance table.
  *
- * Usage:  java sismd.benchmark.Benchmark <image-path>
- *         java sismd.Main benchmark <image-path>   (preferred — via Main)
+ * Usage:  java sismd.benchmark.Benchmark [image-path]
+ *         java sismd.Main benchmark [image-path]   (preferred — via Main)
  *
- * Each implementation is warmed up WARMUP_RUNS times (JIT compilation),
- * then measured MEASURE_RUNS times and averaged.
+ * Defaults to images/in/src.jpg. Output images go to images/out/.
+ * Each implementation is warmed up WARMUP_RUNS times (JIT), then measured
+ * MEASURE_RUNS times and averaged.
  */
 public class Benchmark {
 
@@ -26,7 +28,8 @@ public class Benchmark {
     private static final int MEASURE_RUNS = 5;
 
     public static void main(String[] args) {
-        String imagePath = args.length > 0 ? args[0] : "src.jpg";
+        String imagePath = args.length > 0 ? args[0] : ImagePaths.DEFAULT_INPUT;
+        String stem      = ImagePaths.stem(imagePath);
 
         System.out.println("Loading image: " + imagePath);
         Color[][] image = Utils.loadImage(imagePath);
@@ -60,10 +63,10 @@ public class Benchmark {
 
         printTable(results);
 
-        // Save correctness reference
-        Color[][] output = new SequentialFilter().apply(image);
-        Utils.writeImage(output, "output_sequential.jpg");
-        System.out.println("\nCorrectness reference -> output_sequential.jpg");
+        // Save correctness reference to images/out/
+        String outPath = ImagePaths.output(stem + "_sequential.jpg");
+        Utils.writeImage(new SequentialFilter().apply(image), outPath);
+        System.out.println("\nCorrectness reference -> " + outPath);
     }
 
     // ------------------------------------------------------------------ //
@@ -75,7 +78,7 @@ public class Benchmark {
             filter.apply(image);
 
         Runtime rt = Runtime.getRuntime();
-        long totalTimeNs  = 0;
+        long totalTimeNs   = 0;
         long totalMemBytes = 0;
 
         for (int i = 0; i < MEASURE_RUNS; i++) {
