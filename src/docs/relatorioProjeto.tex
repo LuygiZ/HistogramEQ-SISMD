@@ -1,0 +1,567 @@
+% !TEX TS-program = pdflatex
+% !TEX encoding = UTF-8 Unicode
+\documentclass[a4paper,11pt,openright,BCOR=15mm]{scrbook}
+
+\usepackage[onehalfspacing]{setspace}
+\usepackage[utf8]{inputenc}
+\usepackage[portuges,english]{babel}
+\usepackage[square,numbers]{natbib}
+\usepackage{graphicx}
+\usepackage[pdftex]{hyperref}
+\usepackage[T1]{fontenc}
+\usepackage{pdfpages}
+\usepackage{lettrine}
+\usepackage{booktabs}
+\usepackage{scrhack}
+\usepackage{scrlayer-scrpage}
+\usepackage{ulem}
+\usepackage{xcolor}
+\usepackage{float}
+\usepackage{placeins}
+\usepackage{array}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\definecolor{cinza1}{RGB}{200,200,200}
+\definecolor{cinza2}{RGB}{70,70,70}
+\usepackage{vhistory}
+\usepackage{listings}
+\usepackage{color}
+\usepackage{subcaption}
+\usepackage{multirow}
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+\lstset{frame=tb,
+    language=Java,
+    aboveskip=3mm,
+    belowskip=3mm,
+    showstringspaces=false,
+    columns=flexible,
+    basicstyle={\small\ttfamily},
+    numbers=none,
+    numberstyle=\tiny\color{gray},
+    keywordstyle=\color{blue},
+    commentstyle=\color{dkgreen},
+    stringstyle=\color{mauve},
+    breaklines=true,
+    breakatwhitespace=true,
+    tabsize=3,
+    extendedchars=true,
+    inputencoding=utf8
+}
+
+\newcommand\ChapterFont{}
+\newcommand\SectionFont{}
+\pagestyle{scrheadings}
+\ifoot[]{\raisebox{-32pt}{\includegraphics[width=0.15\textwidth]{logos/logoisep}}}
+\ofoot[]{\raisebox{-22pt}{\includegraphics[width=0.10\textwidth]{logos/logo_DEI_big_transparente}}}
+\cfoot[\pagemark]{\pagemark}
+\automark[section]{chapter}
+\usepackage{blindtext}
+\usepackage{listings}
+\usepackage{fancyvrb}
+\usepackage[mono=false]{libertine}
+
+\begin{document}
+
+\selectlanguage{portuguese}
+\frontmatter
+
+\titlehead{\includegraphics[scale=0.2]{logos/logoisep}
+\hfill \includegraphics[scale=0.115]{logos/logo_DEI_big_transparente}}
+
+\title{Equalização de Histograma e Processamento Paralelo em Java}
+\subtitle{Sistemas Multinúcleo e Distribuídos}
+
+\author{Mestrado em Engenharia Informática -- 2025/2026}
+
+\publishers{
+    Luis Manuel Nazário Mendes Santos\\
+    \texttt{Versão \vhCurrentVersion, \vhCurrentDate}\\
+}
+
+\date{Porto, maio de 2026}
+
+\maketitle
+
+\begin{versionhistory}
+    \vhEntry{1}{2026-05-11}{Luis Manuel Nazário Mendes Santos}{Versão inicial do relatório}
+    \vhEntry{2}{2026-05-11}{Luis Manuel Nazário Mendes Santos}{Implementações paralelas e benchmark}
+    \vhEntry{3}{2026-05-11}{Luis Manuel Nazário Mendes Santos}{Análise de GC e conclusões}
+\end{versionhistory}
+
+\cleardoublepage
+
+\tableofcontents
+\addcontentsline{toc}{chapter}{Lista de Figuras}
+\listoffigures
+\addcontentsline{toc}{chapter}{Lista de Tabelas}
+\listoftables
+
+\chapter*{Declaração de Integridade}
+\addcontentsline{toc}{chapter}{Declaração de Integridade}
+
+Declaro, por este meio, que o presente trabalho académico foi realizado com integridade.\newline
+
+Afirmo não ter recorrido a plágio, falsificação de resultados ou qualquer outra forma de utilização indevida de informação no decurso da sua elaboração.\newline
+
+Assim, o trabalho aqui apresentado é original e da minha autoria, não tendo sido previamente utilizado para outros fins que não os explicitamente reconhecidos. Este documento identifica de forma transparente o modo como foram utilizadas ferramentas de IA, bem como o propósito dessa utilização.\newline
+
+Confirmo ainda o meu conhecimento e respeito pelo Código de Conduta Ética do P.PORTO.\newline
+
+ISEP, Porto, 11 de maio de 2026
+
+\mainmatter
+
+% ============================================================
+\chapter{Introdução}
+% ============================================================
+
+O processamento digital de imagem é uma área com aplicações em medicina, fotografia, visão por computador e muitas outras disciplinas. Uma das operações mais fundamentais é a \textbf{equalização de histograma}, que redistribui as intensidades dos píxeis de modo a aumentar o contraste de imagens de baixo contraste.
+
+Neste projeto, implementa-se a equalização de histograma em Java, explorando diferentes estratégias de concorrência: solução sequencial, multithreading manual, thread pools, o framework Fork/Join e o paradigma assíncrono com \texttt{CompletableFuture}. O objetivo não é apenas a correção dos resultados, mas também a análise de desempenho e escalabilidade de cada abordagem.
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{../../src.jpg}
+        \caption{Imagem original}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{../../output_sequential.jpg}
+        \caption{Imagem após equalização}
+    \end{subfigure}
+    \caption{Efeito visual da equalização de histograma}
+    \label{fig:before_after}
+\end{figure}
+
+A imagem utilizada tem dimensões 860×1276 píxeis (1~097~360 píxeis no total), e os testes foram executados numa máquina com 22 processadores lógicos.
+
+O algoritmo de equalização é dividido em três fases:
+\begin{enumerate}
+    \item \textbf{Histograma de luminosidade:} array de 256 inteiros onde a posição $i$ contém o número de píxeis com luminosidade $i$.
+    \item \textbf{Histograma cumulativo:} array de 256 inteiros onde a posição $i$ contém o número de píxeis com luminosidade $\leq i$.
+    \item \textbf{Reescrita dos píxeis:} cada píxel é transformado segundo:
+    \[
+        \text{newLuminosity} = \left\lfloor 255 \times \frac{\text{cumulativeHist}[L]}{\text{totalPixels}} \right\rfloor
+    \]
+\end{enumerate}
+
+% ============================================================
+\chapter{Objetivos}
+% ============================================================
+
+O projeto tem como objetivos principais:
+
+\begin{itemize}
+    \item Implementar a equalização de histograma com diferentes abordagens de concorrência em Java.
+    \item Comparar o desempenho (tempo de execução, consumo de memória, escalabilidade) de cada implementação.
+    \item Explorar mecanismos de sincronização e garantir \textit{thread safety} em todas as implementações paralelas.
+    \item Configurar e analisar o impacto de diferentes \textit{Garbage Collectors} da JVM no desempenho da aplicação.
+    \item Documentar e justificar as escolhas de design e concorrência em cada abordagem.
+\end{itemize}
+
+A estrutura do projeto foi organizada em pacotes Java de acordo com a responsabilidade de cada componente:
+
+\begin{itemize}
+    \item \texttt{sismd.filters} --- Interface, classe base e todas as implementações do filtro.
+    \item \texttt{sismd.benchmark} --- Infraestrutura de medição de desempenho.
+    \item \texttt{sismd.utils} --- Utilitários de I/O de imagem (código fornecido pelo docente).
+    \item \texttt{sismd.starter} --- Código de demonstração original fornecido pelo docente.
+    \item \texttt{sismd.Main} --- Ponto de entrada com menu interativo.
+\end{itemize}
+
+% ============================================================
+\chapter{Implementações}
+% ============================================================
+
+Todas as implementações partilham uma interface comum \texttt{HistogramEqualizer} e estendem a classe abstrata \texttt{AbstractFilter}, que disponibiliza os métodos utilitários \texttt{computeLuminosity}, \texttt{buildCumulativeHistogram} e \texttt{equalizedLuminosity}. Os métodos \texttt{computeHistogram} e \texttt{applyEqualization} da \texttt{SequentialFilter} têm visibilidade de pacote (\textit{package-private}) e são reutilizados pelas implementações paralelas como operações de folha.
+
+% ============================================================
+\section{Solução Sequencial}
+% ============================================================
+
+A solução sequencial serve como linha de base (\textit{baseline}) para comparação de desempenho. Processa o array de píxeis em três passagens sequenciais correspondentes às três fases do algoritmo.
+
+\textbf{Justificação:} A implementação sequencial não tem overhead de criação de threads nem de sincronização, pelo que representa o custo mínimo do algoritmo. É indispensável para calcular o \textit{speedup} das implementações paralelas e para verificar a correção dos resultados.
+
+\begin{lstlisting}[caption={Núcleo da implementação sequencial}]
+public Color[][] apply(Color[][] image) {
+    Color[][] result = Utils.copyImage(image);
+    int totalPixels = result.length * result[0].length;
+
+    int[] hist       = computeHistogram(result, 0, result.length);
+    int[] cumulative = buildCumulativeHistogram(hist);
+    applyEqualization(result, 0, result.length, cumulative, totalPixels);
+
+    return result;
+}
+\end{lstlisting}
+
+% ============================================================
+\section{Multithreaded sem Thread Pool}
+% ============================================================
+
+Esta implementação cria e gere threads manualmente, sem reutilização. A estratégia divide as linhas da imagem igualmente entre as threads disponíveis.
+
+\textbf{Estratégia de concorrência:}
+\begin{enumerate}
+    \item \textbf{Fase 1 (paralela):} Cada thread calcula um histograma parcial para as suas linhas, sem qualquer sincronização --- não há estado partilhado durante esta fase.
+    \item \textbf{Barreira:} A thread principal aguarda a conclusão de todas as threads com \texttt{join()} e faz o merge dos histogramas parciais (256 iterações, custo desprezável).
+    \item \textbf{Fase 2 (sequencial):} O histograma cumulativo é calculado sequencialmente (O(256)).
+    \item \textbf{Fase 3 (paralela):} Cada thread reescreve os seus píxeis --- as threads acedem a linhas disjuntas, pelo que não há necessidade de sincronização.
+\end{enumerate}
+
+\textbf{Justificação:} A ausência de \textit{locks} ou variáveis atómicas durante as fases paralelas elimina o overhead de sincronização. A opção por histogramas parciais por thread (em vez de um array partilhado com \texttt{AtomicIntegerArray}) evita falsa partilha de cache e contention.
+
+\begin{lstlisting}[caption={Fase paralela de histograma com threads manuais}]
+for (int t = 0; t < actualThreads; t++) {
+    final int id    = t;
+    final int start = id * rows / actualThreads;
+    final int end   = (id + 1) * rows / actualThreads;
+    threads[t] = new Thread(() ->
+        partialHists[id] = SequentialFilter.computeHistogram(result, start, end)
+    );
+    threads[t].start();
+}
+joinAll(threads); // barreira: aguarda todas as threads
+
+int[] hist = new int[256];
+for (int[] partial : partialHists)
+    for (int i = 0; i < 256; i++) hist[i] += partial[i];
+\end{lstlisting}
+
+% ============================================================
+\section{Thread Pool com ExecutorService}
+% ============================================================
+
+Esta implementação substitui a criação manual de threads por um pool fixo gerido pelo \texttt{ExecutorService}. As threads são reutilizadas entre as fases 1 e 3, eliminando o custo de criação e destruição de threads.
+
+\textbf{Justificação:} Em cenários com muitas execuções do filtro (como o benchmark), o overhead de criar e destruir threads a cada execução pode ser significativo. O thread pool amortiza esse custo. As tarefas de histograma retornam \texttt{Future<int[]>}, permitindo recolher os resultados de forma limpa sem variáveis partilhadas.
+
+\begin{lstlisting}[caption={Submissão de tarefas ao thread pool}]
+List<Future<int[]>> histFutures = new ArrayList<>(actualThreads);
+for (int t = 0; t < actualThreads; t++) {
+    final int start = t * rows / actualThreads;
+    final int end   = (t + 1) * rows / actualThreads;
+    histFutures.add(pool.submit(() ->
+        SequentialFilter.computeHistogram(result, start, end)
+    ));
+}
+int[] hist = new int[256];
+for (Future<int[]> f : histFutures) {
+    int[] partial = f.get();
+    for (int i = 0; i < 256; i++) hist[i] += partial[i];
+}
+\end{lstlisting}
+
+% ============================================================
+\section{Fork/Join Framework}
+% ============================================================
+
+A implementação Fork/Join utiliza o paradigma de \textit{divide-and-conquer} para dividir recursivamente o array de linhas até atingir um limiar (\texttt{THRESHOLD = 32} linhas), a partir do qual a computação é sequencial.
+
+\textbf{Estratégia:}
+\begin{itemize}
+    \item \texttt{HistogramTask} (\texttt{RecursiveTask<int[]>}): divide o intervalo de linhas ao meio; a metade esquerda é bifurcada (\texttt{fork}), a metade direita é computada na thread atual (\texttt{compute}), e depois faz-se \texttt{join} + merge.
+    \item \texttt{EqualizationTask} (\texttt{RecursiveAction}): usa \texttt{invokeAll} para executar ambas as metades em paralelo.
+\end{itemize}
+
+\textbf{Justificação:} O \texttt{ForkJoinPool} usa \textit{work stealing}: threads que ficam sem tarefas roubam tarefas de outras, maximizando a utilização dos processadores. O limiar de 32 linhas foi escolhido de modo a criar tarefas granulares suficientes para manter todas as threads ocupadas sem excessivo overhead de \textit{forking}.
+
+\begin{lstlisting}[caption={HistogramTask com Fork/Join}]
+@Override
+protected int[] compute() {
+    if (end - start <= THRESHOLD)
+        return SequentialFilter.computeHistogram(image, start, end);
+
+    int mid = (start + end) >>> 1;
+    HistogramTask left  = new HistogramTask(image, start, mid);
+    HistogramTask right = new HistogramTask(image, mid, end);
+
+    left.fork();                      // execucao assincrona
+    int[] rightResult = right.compute();  // execucao sincrona
+    int[] leftResult  = left.join();      // aguarda left
+
+    for (int i = 0; i < 256; i++) leftResult[i] += rightResult[i];
+    return leftResult;
+}
+\end{lstlisting}
+
+% ============================================================
+\section{CompletableFuture}
+% ============================================================
+
+A implementação com \texttt{CompletableFuture} usa programação assíncrona declarativa para expressar a composição de tarefas sem gestão explícita de threads ou bloqueios.
+
+\textbf{Estratégia:}
+\begin{itemize}
+    \item \texttt{supplyAsync} lança as tarefas de histograma assincronamente num \texttt{ExecutorService} dedicado.
+    \item \texttt{CompletableFuture.allOf(...).thenApply(...)} aguarda a conclusão de todas as tarefas e executa o merge como uma continuação não bloqueante.
+    \item \texttt{runAsync} lança as tarefas de equalização; \texttt{allOf(...).join()} aguarda a conclusão.
+\end{itemize}
+
+\textbf{Justificação:} O \texttt{CompletableFuture} permite expressar dependências entre tarefas de forma declarativa. O uso de \texttt{thenApply} para o merge garante que este só ocorre após todas as tarefas estarem completas, sem \textit{polling} nem bloqueio prematuro. O \texttt{join()} sobre os futuros dentro do \texttt{thenApply} é não bloqueante porque todos já terminaram no momento em que \texttt{allOf} dispara a continuação.
+
+\begin{lstlisting}[caption={Merge assíncrono com allOf e thenApply}]
+int[] hist = CompletableFuture
+    .allOf(histFutures.toArray(new CompletableFuture[0]))
+    .thenApply(v -> {
+        int[] merged = new int[256];
+        for (CompletableFuture<int[]> f : histFutures) {
+            int[] partial = f.join(); // nao bloqueia: todos ja concluiram
+            for (int i = 0; i < 256; i++) merged[i] += partial[i];
+        }
+        return merged;
+    })
+    .join();
+\end{lstlisting}
+
+% ============================================================
+\section{Tuning do Garbage Collector}
+% ============================================================
+
+O benchmark foi executado com quatro \textit{Garbage Collectors} distintos da JVM para avaliar o seu impacto no desempenho da aplicação. Os logs foram gerados com a flag \texttt{-Xlog:gc:<ficheiro>.log:time,uptime,level,tags}.
+
+\subsection{Garbage Collectors Avaliados}
+
+\textbf{Serial GC} (\texttt{-XX:+UseSerialGC}): Usa uma única thread para todas as operações de GC. As pausas são stop-the-world de longa duração (até 69~ms nos logs obtidos). Não é adequado para aplicações multithreaded.
+
+\textbf{Parallel GC} (\texttt{-XX:+UseParallelGC}): Usa múltiplas threads para operações de GC, reduzindo o tempo de pausa. As pausas Full GC ficaram entre 23 e 41~ms. Optimizado para throughput, sacrificando latência.
+
+\textbf{G1GC} (\texttt{-XX:+UseG1GC}): Divide a heap em regiões e recolhe as mais rentáveis primeiro (\textit{Garbage First}). As pausas Young ficaram entre 3 e 10~ms; as pausas Full (provocadas pelo \texttt{System.gc()} do benchmark) entre 7 e 10~ms. Mantém o heap em torno de 38--42~MB de forma consistente.
+
+\textbf{ZGC} (\texttt{-XX:+UseZGC}): GC de baixa latência com recolha maioritariamente concorrente (sem pausas stop-the-world significativas). No entanto, o overhead de manutenção de barreiras de escrita e leitura concorrentes aumentou o tempo sequencial de 22--24~ms para 32~ms, e o consumo de memória foi mais elevado (60--80~MB).
+
+\subsection{Resultados e Escolha}
+
+\begin{table}[H]
+    \centering
+    \caption{Comparação de Garbage Collectors (sequencial / melhor paralelo)}
+    \label{tab:gc_comparison}
+    \begin{tabular}{lcccc}
+        \toprule
+        \textbf{GC} & \textbf{Tempo Seq. (ms)} & \textbf{Melhor (ms)} & \textbf{Pausa Max. (ms)} & \textbf{Mem. Média (MB)} \\
+        \midrule
+        Serial GC   & 23 & 5  & 69  & 38--56 \\
+        Parallel GC & 21 & 5  & 41  & 38--66 \\
+        G1GC        & 22 & 5  & 11  & 38--43 \\
+        ZGC         & 32 & 13 & N/A & 58--80 \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+\textbf{Configuração escolhida: G1GC.} O G1GC apresentou o melhor equilíbrio entre latência de pausa (máximo de ~11~ms) e throughput (tempo sequencial de 22~ms, idêntico ao Parallel GC). O Serial GC é inadequado para código paralelo pois as suas pausas longas interrompem todas as threads da aplicação. O ZGC, apesar de pausas mínimas, introduz overhead nas operações de leitura e escrita que prejudicou o desempenho global neste tipo de carga de trabalho.
+
+Os parâmetros utilizados em produção:
+\begin{Verbatim}
+-XX:+UseG1GC
+-XX:MaxGCPauseMillis=200
+-XX:G1HeapRegionSize=4m
+-Xms256m -Xmx2g
+\end{Verbatim}
+
+% ============================================================
+\chapter{Concorrência e Sincronização}
+% ============================================================
+
+\section{Estrutura das Fases}
+
+O algoritmo de equalização de histograma tem uma estrutura de fases (\textit{pipeline barrier}):
+
+\begin{enumerate}
+    \item \textbf{Fase 1} (paralelizável): Computação do histograma — os píxeis são independentes.
+    \item \textbf{Barreira}: Merge dos histogramas parciais — necessita que todas as threads da fase 1 tenham terminado.
+    \item \textbf{Fase 2} (sequencial): O histograma cumulativo é calculado em O(256) --- custo negligenciável.
+    \item \textbf{Fase 3} (paralelizável): Reescrita dos píxeis — independentes e em linhas disjuntas.
+\end{enumerate}
+
+\section{Thread Safety}
+
+\textbf{Fase 1 (histograma):} Cada thread opera sobre um array local \texttt{int[256]}. Não há estado partilhado mutável. Após \texttt{join()}/\texttt{Future.get()}/\texttt{allOf().join()}, as escritas de todas as threads são visíveis na thread principal (garantia de \textit{happens-before} da API de concorrência Java).
+
+\textbf{Merge:} Executado exclusivamente na thread principal. Não requer sincronização.
+
+\textbf{Fase 3 (equalização):} Cada thread escreve em linhas disjuntas do array \texttt{result}. O array \texttt{cumulative} é lido mas nunca escrito pelas threads, pelo que não há \textit{data races}.
+
+\section{Estruturas de Dados e Mecanismos}
+
+\begin{table}[H]
+    \centering
+    \caption{Mecanismos de sincronização por implementação}
+    \label{tab:sync}
+    \begin{tabular}{lll}
+        \toprule
+        \textbf{Implementação} & \textbf{Sincronização} & \textbf{Justificação} \\
+        \midrule
+        Multithreaded  & \texttt{Thread.join()} & Barreira explícita entre fases \\
+        Thread Pool    & \texttt{Future.get()}  & Bloqueante por tarefa; recolhe resultado \\
+        Fork/Join      & \texttt{fork/join}, \texttt{invokeAll} & Implícito no framework \\
+        CompletableFuture & \texttt{allOf().join()} & Composição declarativa de dependências \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+A opção por histogramas parciais por thread (sem \texttt{synchronized} nem \texttt{AtomicIntegerArray}) é intencional: elimina \textit{contention} e falsa partilha de cache. O custo do merge (256 adições) é desprezável face ao trabalho paralelo.
+
+% ============================================================
+\chapter{Análise de Performance}
+% ============================================================
+
+\section{Configuração do Ambiente}
+
+\begin{itemize}
+    \item \textbf{JVM:} Java 21, G1GC (\texttt{-Xms256m -Xmx2g})
+    \item \textbf{Imagem:} 860 × 1276 píxeis (1~097~360 píxeis)
+    \item \textbf{Processadores:} 22 lógicos
+    \item \textbf{Metodologia:} 3 execuções de aquecimento (JIT), média de 5 medições com \texttt{System.nanoTime()}
+\end{itemize}
+
+\section{Resultados}
+
+\begin{table}[H]
+    \centering
+    \caption{Resultados completos do benchmark (G1GC, imagem 860×1276)}
+    \label{tab:benchmark}
+    \begin{tabular}{lrrr}
+        \toprule
+        \textbf{Implementação} & \textbf{Tempo (ms)} & \textbf{Memória (MB)} & \textbf{Speedup} \\
+        \midrule
+        Sequential                      & 24 & 38.20 & 1.00× \\
+        \midrule
+        Multithreaded -- 1 thread       & 22 & 39.97 & 1.09× \\
+        Multithreaded -- 2 threads      & 18 & 39.76 & 1.33× \\
+        Multithreaded -- 4 threads      & 10 & 39.85 & 2.40× \\
+        Multithreaded -- 8 threads      & 14 & 40.71 & 1.71× \\
+        Multithreaded -- 22 threads     & 12 & 40.39 & 2.00× \\
+        \midrule
+        Thread Pool -- 1 thread         & 22 & 38.35 & 1.09× \\
+        Thread Pool -- 2 threads        & 13 & 38.57 & 1.85× \\
+        Thread Pool -- 4 threads        &  9 & 39.58 & 2.67× \\
+        Thread Pool -- 8 threads        &  7 & 39.49 & 3.43× \\
+        Thread Pool -- 22 threads       &  6 & 40.13 & 4.00× \\
+        \midrule
+        Fork/Join                       &  7 & 39.49 & 3.43× \\
+        \midrule
+        CompletableFuture -- 1 thread   & 23 & 38.04 & 1.04× \\
+        CompletableFuture -- 2 threads  & 13 & 38.67 & 1.85× \\
+        CompletableFuture -- 4 threads  &  9 & 39.85 & 2.67× \\
+        CompletableFuture -- 8 threads  &  7 & 39.67 & 3.43× \\
+        CompletableFuture -- 22 threads &  6 & 39.74 & 4.00× \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+\section{Eficiência e Ganhos}
+
+A solução sequencial demora 24~ms. As melhores implementações paralelas atingem 6~ms, um \textit{speedup} de \textbf{4×}. Este valor está abaixo do máximo teórico de Amdahl --- com 22 processadores, seria possível um speedup muito superior se o algoritmo fosse completamente paralelizável. A limitação deve-se a:
+
+\begin{itemize}
+    \item \textbf{Fase 2 sequencial}: O histograma cumulativo (O(256)) é intrínsecamente sequencial e constitui uma barreira entre as fases 1 e 3.
+    \item \textbf{Overhead de coordenação}: Para imagens de tamanho moderado (~1M píxeis), o custo de criar/gerir threads, fazer \textit{fork/join} ou lançar \texttt{CompletableFuture} representa uma fração relevante do tempo total.
+    \item \textbf{Pressão de memória}: A imagem ocupa ~38~MB. Com muitos threads, o acesso concorrente à memória pode introduzir contenção no bus de memória e \textit{cache misses}.
+\end{itemize}
+
+\section{Escalabilidade}
+
+\begin{table}[H]
+    \centering
+    \caption{Escalabilidade com número de threads (Thread Pool e CompletableFuture)}
+    \label{tab:scalability}
+    \begin{tabular}{crrrr}
+        \toprule
+        \textbf{Threads} & \multicolumn{2}{c}{\textbf{Thread Pool}} & \multicolumn{2}{c}{\textbf{CompletableFuture}} \\
+        \cmidrule(lr){2-3} \cmidrule(lr){4-5}
+        & Tempo (ms) & Speedup & Tempo (ms) & Speedup \\
+        \midrule
+        1  & 22 & 1.09× & 23 & 1.04× \\
+        2  & 13 & 1.85× & 13 & 1.85× \\
+        4  &  9 & 2.67× &  9 & 2.67× \\
+        8  &  7 & 3.43× &  7 & 3.43× \\
+        22 &  6 & 4.00× &  6 & 4.00× \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+O \textit{speedup} cresce de forma sub-linear com o número de threads, como previsto pela Lei de Amdahl. A partir de 8 threads, os ganhos diminuem significativamente --- com 22 threads, o tempo (6~ms) é apenas marginalmente melhor do que com 8 threads (7~ms). Isto sugere que a fração paralelizável do algoritmo está próxima de saturar.
+
+\section{Overhead de Coordenação}
+
+Ao comparar o Multithreaded sem pool com o Thread Pool com 1 thread, o Thread Pool apresenta um overhead ligeiramente superior ao Sequential (22~ms vs. 24~ms). Isto deve-se ao custo de submissão de tarefas ao \texttt{ExecutorService}. A partir de 2 threads, o Thread Pool supera claramente o Multithreaded sem pool, evidenciando que a reutilização de threads compensa o overhead de gestão do pool quando há múltiplas fases de paralelismo.
+
+O Fork/Join apresenta 3.43× de speedup sem necessidade de especificar o número de threads, delegando a decisão ao runtime. Para imagens maiores, este mecanismo de \textit{work stealing} tornaria o Fork/Join ainda mais competitivo.
+
+\section{Análise de Memória}
+
+O consumo de memória mantém-se consistente entre implementações (~38--41~MB), refletindo principalmente o tamanho da imagem em memória. O ligeiro aumento nas implementações paralelas (~2~MB) deve-se aos arrays de histogramas parciais criados por thread. Não foram observadas fugas de memória --- o \texttt{ExecutorService} é encerrado com \texttt{shutdown()} em \texttt{finally}, e o \texttt{ForkJoinPool} é fechado via \textit{try-with-resources}.
+
+\section{Bottlenecks Identificados}
+
+\begin{enumerate}
+    \item \textbf{Fase sequencial obrigatória (histograma cumulativo):} Embora O(256), introduz uma barreira que impede a fusão das fases 1 e 3 numa única passagem paralela.
+    \item \textbf{Granularidade de tarefas:} Para imagens de ~1M píxeis e 22 threads, cada thread processa apenas ~50k píxeis. O overhead relativo de lançar e sincronizar threads torna-se significativo.
+    \item \textbf{Criação de objetos \texttt{Color}:} A fase 3 cria um novo objeto \texttt{Color} por píxel (~1M objetos por execução). Isto pressiona o GC e é um bottleneck independente do grau de paralelismo.
+\end{enumerate}
+
+% ============================================================
+\chapter{Conclusões}
+% ============================================================
+
+\section{Síntese dos Resultados}
+
+Este projeto demonstrou que a paralelização da equalização de histograma produz ganhos reais mas limitados pela estrutura do algoritmo. O melhor \textit{speedup} obtido foi de \textbf{4×} (de 24~ms para 6~ms), com Thread Pool de 22 threads e CompletableFuture de 22 threads, numa máquina de 22 processadores.
+
+O \textbf{Fork/Join} destacou-se pela ausência de configuração explícita de threads e pelo comportamento estável, sendo particularmente adequado para algoritmos de \textit{divide-and-conquer} como o histograma. O \textbf{CompletableFuture} ofereceu código mais expressivo e declarativo sem penalidade de desempenho face ao Thread Pool. O \textbf{Multithreaded manual} demonstrou os desafios de gestão de threads e a importância de evitar contenção, mas ficou aquém do Thread Pool a partir de 4 threads.
+
+\section{Garbage Collector}
+
+O \textbf{G1GC} foi o GC mais equilibrado para esta carga de trabalho, com pausas máximas de ~11~ms e tempo sequencial competitivo. O ZGC, apesar de pausas mínimas, introduziu overhead de barreira que penalizou todas as implementações. Para aplicações de processamento de imagem que criam muitos objetos \texttt{Color} por execução, o G1GC oferece o melhor compromisso entre latência e throughput.
+
+\section{Reflexão}
+
+A Lei de Amdahl explica o comportamento observado: com uma fração sequencial de ~5\% (histograma cumulativo + overhead fixo), o speedup máximo teórico é ~15×. O speedup obtido de 4× indica que há ainda espaço para otimização --- nomeadamente ao substituir os objetos \texttt{Color} por arrays de inteiros raw, eliminando a pressão no GC durante a fase 3.
+
+% ============================================================
+\bibliographystyle{ACM-Reference-Format}
+\renewcommand\bibname{Referências}
+
+\begin{thebibliography}{9}
+
+\bibitem{gonzalez2018}
+R.C. Gonzalez and R.E. Woods.
+\newblock \textit{Digital Image Processing}, 4th edition.
+\newblock Pearson, 2018.
+
+\bibitem{sedgewick2016}
+Robert Sedgewick and Kevin Wayne.
+\newblock \textit{Computer Science: An Interdisciplinary Approach}, 1st edition.
+\newblock Addison-Wesley Professional, 2016.
+
+\bibitem{goetz2006}
+Brian Goetz et al.
+\newblock \textit{Java Concurrency in Practice}.
+\newblock Addison-Wesley, 2006.
+
+\bibitem{oracle_forkjoin}
+Oracle Corporation.
+\newblock \textit{Fork/Join Framework}.
+\newblock Java Documentation, 2024.
+\newblock \url{https://docs.oracle.com/javase/tutorial/essential/concurrency/forkjoin.html}
+
+\bibitem{oracle_completable}
+Oracle Corporation.
+\newblock \textit{CompletableFuture API}.
+\newblock Java SE 21 Documentation, 2024.
+\newblock \url{https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/CompletableFuture.html}
+
+\end{thebibliography}
+
+\label{references}
+\addcontentsline{toc}{chapter}{Referências}
+
+\end{document}

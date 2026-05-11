@@ -1,0 +1,13 @@
+\babel@toc {english}{}\relax 
+\babel@toc {portuguese}{}\relax 
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\contentsline {table}{\numberline {3.1}{\ignorespaces Comparação de Garbage Collectors (sequencial / melhor paralelo)}}{10}{table.caption.7}%
+\addvspace {10\p@ }
+\contentsline {table}{\numberline {4.1}{\ignorespaces Mecanismos de sincronização por implementação}}{12}{table.caption.8}%
+\addvspace {10\p@ }
+\contentsline {table}{\numberline {5.1}{\ignorespaces Resultados completos do benchmark (G1GC, imagem 860×1276)}}{14}{table.caption.9}%
+\contentsline {table}{\numberline {5.2}{\ignorespaces Escalabilidade com número de threads (Thread Pool e CompletableFuture)}}{15}{table.caption.10}%
+\addvspace {10\p@ }
+\providecommand \tocbasic@end@toc@file {}\tocbasic@end@toc@file 

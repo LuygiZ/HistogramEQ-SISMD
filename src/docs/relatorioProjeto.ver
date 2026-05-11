@@ -1,0 +1,18 @@
+\begin {longtable}{@{}ll>{\hsize =\vhAuthorColWidth }X>{\hsize =\vhChangeColWidth }X@{}}
+\textbf {\vhversionname }
+ & \textbf {\vhdatename }
+ & \textbf {\vhauthorname }
+ & \textbf {\vhchangename }\\[1ex]
+1
+ & 2026-05-11
+ & \listset {Luis Manuel Nazário Mendes Santos}
+ & Versão inicial do relatório\\
+2
+ & 2026-05-11
+ & \listset {Luis Manuel Nazário Mendes Santos}
+ & Implementações paralelas e benchmark\\
+3
+ & 2026-05-11
+ & \listset {Luis Manuel Nazário Mendes Santos}
+ & Análise de GC e conclusões\\
+\end {longtable}
