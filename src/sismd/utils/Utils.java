@@ -4,7 +4,10 @@ import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.Iterator;
 import javax.imageio.ImageIO;
+import javax.imageio.ImageReader;
+import javax.imageio.stream.ImageInputStream;
 
 public class Utils {
 
@@ -43,6 +46,25 @@ public class Utils {
       for (int j = 0; j < image[i].length; j++)
         copy[i][j] = image[i][j];
     return copy;
+  }
+
+  /** Returns {width, height} by reading only the image header — does not load pixels. */
+  public static int[] readDimensions(String filename) {
+    try (ImageInputStream iis = ImageIO.createImageInputStream(new File(filename))) {
+      Iterator<ImageReader> readers = ImageIO.getImageReaders(iis);
+      if (readers.hasNext()) {
+        ImageReader reader = readers.next();
+        try {
+          reader.setInput(iis);
+          return new int[]{ reader.getWidth(0), reader.getHeight(0) };
+        } finally {
+          reader.dispose();
+        }
+      }
+    } catch (IOException e) {
+      // fall through to fallback
+    }
+    return new int[]{ 0, 0 };
   }
 
   private static BufferedImage loadImageFile(String filename) {

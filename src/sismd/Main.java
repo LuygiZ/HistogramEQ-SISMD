@@ -1,6 +1,7 @@
 package sismd;
 
 import java.awt.Color;
+import java.io.File;
 import java.util.Scanner;
 import sismd.benchmark.Benchmark;
 import sismd.filters.CompletableFutureFilter;
@@ -68,13 +69,13 @@ public class Main {
     }
 
     private static void menuBenchmark(Scanner sc) {
-        String img = prompt(sc, "Image path", ImagePaths.DEFAULT_INPUT);
+        String img = selectImage(sc);
         System.out.println();
         Benchmark.main(new String[]{ img });
     }
 
     private static void menuApplySingle(Scanner sc) {
-        String img = prompt(sc, "Image path", ImagePaths.DEFAULT_INPUT);
+        String img = selectImage(sc);
         String stem = ImagePaths.stem(img);
 
         System.out.println();
@@ -99,7 +100,7 @@ public class Main {
     }
 
     private static void menuApplyAll(Scanner sc) {
-        String img    = prompt(sc, "Image path", ImagePaths.DEFAULT_INPUT);
+        String img    = selectImage(sc);
         int    threads = Integer.parseInt(prompt(sc, "Threads for parallel filters", "4"));
         String stem   = ImagePaths.stem(img);
 
@@ -177,6 +178,38 @@ public class Main {
             case "5", "completable"   -> new CompletableFutureFilter(threads);
             default                   -> new SequentialFilter();
         };
+    }
+
+    private static String selectImage(Scanner sc) {
+        File[] images = ImagePaths.listInputImages();
+        if (images.length == 0) {
+            System.out.println("  No images found in " + ImagePaths.INPUT_DIR);
+            return ImagePaths.DEFAULT_INPUT;
+        }
+
+        String defaultName = new File(ImagePaths.DEFAULT_INPUT).getName();
+        int defaultIdx = 1;
+
+        System.out.println();
+        System.out.println("  Available images:");
+        System.out.printf("  %-4s  %-28s  %13s  %15s%n", "#", "File", "Resolution", "Pixels");
+        System.out.println("  " + "-".repeat(68));
+        for (int i = 0; i < images.length; i++) {
+            int[] dim = Utils.readDimensions(images[i].getPath());
+            long pixels = (long) dim[0] * dim[1];
+            boolean isDefault = images[i].getName().equalsIgnoreCase(defaultName);
+            if (isDefault) defaultIdx = i + 1;
+            System.out.printf("  %-4d  %-28s  %6dx%-6d  %,15d%s%n",
+                i + 1, images[i].getName(), dim[0], dim[1], pixels, isDefault ? "  *" : "");
+        }
+        System.out.printf("%n  Select image [%d]: ", defaultIdx);
+        String line = sc.nextLine().trim();
+        if (line.isEmpty()) return images[defaultIdx - 1].getPath();
+        try {
+            int idx = Integer.parseInt(line);
+            if (idx >= 1 && idx <= images.length) return images[idx - 1].getPath();
+        } catch (NumberFormatException ignored) {}
+        return line; // treat raw input as a custom path
     }
 
     private static String prompt(Scanner sc, String label, String defaultVal) {

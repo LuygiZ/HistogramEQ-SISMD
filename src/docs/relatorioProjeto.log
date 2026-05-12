@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.27 (MiKTeX 25.4) (preloaded format=pdflatex 2025.11.5)  11 MAY 2026 17:19
+This is pdfTeX, Version 3.141592653-2.6-1.40.27 (MiKTeX 25.4) (preloaded format=pdflatex 2025.11.5)  12 MAY 2026 01:10
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -842,76 +842,39 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 
 
 {C:/Users/lmnam/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map}{C:/Users/lmnam/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/libertine/lbtn_25tcsq.enc}{C:/Users/lmnam/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/libertine/lbtn_76gpa5.enc} <./logos/logoisep.png> <./logos/logo_DEI_big_transparente.png>]
-\openout3 = `relatorioProjeto.ver'.
-
-
 
 [2
 
 
-]
-\vh@hstfile=\write5
-\openout5 = `relatorioProjeto.hst'.
-
- (relatorioProjeto.ver) (relatorioProjeto.ver) (relatorioProjeto.ver
-Underfull \hbox (badness 10000) in paragraph at lines 8--9
-[]|\T1/LinuxLibertineT-TLF/m/n/10.95 Luis Ma-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 8--9
-\T1/LinuxLibertineT-TLF/m/n/10.95 nuel Na-zá-rio
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 12--13
-[]|\T1/LinuxLibertineT-TLF/m/n/10.95 Luis Ma-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 12--13
-\T1/LinuxLibertineT-TLF/m/n/10.95 nuel Na-zá-rio
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 16--17
-[]|\T1/LinuxLibertineT-TLF/m/n/10.95 Luis Ma-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 16--17
-\T1/LinuxLibertineT-TLF/m/n/10.95 nuel Na-zá-rio
- []
-
+] (relatorioProjeto.toc
+LaTeX Font Info:    Trying to load font information for TS1+LinuxLibertineT-TLF on input line 24.
+ (C:\Users\lmnam\AppData\Local\Programs\MiKTeX\tex/latex/libertine\ts1linuxlibertinet-tlf.fd
+File: TS1LinuxLibertineT-TLF.fd 2017/03/20 (autoinst) Font definitions for TS1/LinuxLibertineT-TLF.
 )
+LaTeX Font Info:    Font shape `TS1/LinuxLibertineT-TLF/m/n' will be
+(Font)              scaled to size 10.95pt on input line 24.
+
 
 LaTeX Font Info:    Font shape `T1/LinuxLibertineT-TLF/m/sl' in size <10.95> not available
-(Font)              Font shape `T1/LinuxLibertineT-TLF/m/it' tried instead on input line 95.
+(Font)              Font shape `T1/LinuxLibertineT-TLF/m/it' tried instead on input line 30.
 LaTeX Font Info:    Font shape `T1/LinuxLibertineT-TLF/m/it' will be
-(Font)              scaled to size 10.95pt on input line 95.
-[3{C:/Users/lmnam/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/libertine/lbtn_nh77jq.enc}]
-
-[4
+(Font)              scaled to size 10.95pt on input line 30.
+[3
 
 
-] (relatorioProjeto.toc
-
-[5
-
-
-])
-\tf@toc=\write6
-\openout6 = `relatorioProjeto.toc'.
+{C:/Users/lmnam/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/libertine/lbtn_naooyc.enc}])
+\tf@toc=\write5
+\openout5 = `relatorioProjeto.toc'.
 
 
 
 File: logos/logo_DEI_big_transparente.png Graphic file (type png)
 <use logos/logo_DEI_big_transparente.png>
-Package pdftex.def Info: logos/logo_DEI_big_transparente.png  used on input line 99.
+Package pdftex.def Info: logos/logo_DEI_big_transparente.png  used on input line 93.
 (pdftex.def)             Requested size: 38.84038pt x 15.29182pt.
 File: logos/logoisep.png Graphic file (type png)
 <use logos/logoisep.png>
-Package pdftex.def Info: logos/logoisep.png  used on input line 99.
+Package pdftex.def Info: logos/logoisep.png  used on input line 93.
 (pdftex.def)             Requested size: 58.25465pt x 22.2305pt.
 
 Package scrlayer-scrpage Warning: \footheight to low.
@@ -921,100 +884,95 @@ Package scrlayer-scrpage Warning: \footheight to low.
 (scrlayer-scrpage)                processing, but you should do this yourself,
 (scrlayer-scrpage)                e.g., setting typearea's option
 (scrlayer-scrpage)                `footheight=43.4974pt'.
-(scrlayer-scrpage)                I'll also increase \footskip on input line 99.
+(scrlayer-scrpage)                I'll also increase \footskip on input line 93.
 
-[6{C:/Users/lmnam/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/libertine/lbtn_7grukw.enc}] (relatorioProjeto.lof)
-\tf@lof=\write7
-\openout7 = `relatorioProjeto.lof'.
+[4{C:/Users/lmnam/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/libertine/lbtn_7grukw.enc}] (relatorioProjeto.lof)
+\tf@lof=\write6
+\openout6 = `relatorioProjeto.lof'.
 
 
 
-[7
+[5
 
 
 ]
+
+[6
+
+
+] (relatorioProjeto.lot)
+\tf@lot=\write7
+\openout7 = `relatorioProjeto.lot'.
+
+
+
+[7]
 
 [8
 
 
-] (relatorioProjeto.lot
-LaTeX Font Info:    Trying to load font information for TS1+LinuxLibertineT-TLF on input line 10.
- (C:\Users\lmnam\AppData\Local\Programs\MiKTeX\tex/latex/libertine\ts1linuxlibertinet-tlf.fd
-File: TS1LinuxLibertineT-TLF.fd 2017/03/20 (autoinst) Font definitions for TS1/LinuxLibertineT-TLF.
-)
-LaTeX Font Info:    Font shape `TS1/LinuxLibertineT-TLF/m/n' will be
-(Font)              scaled to size 10.95pt on input line 10.
-)
-\tf@lot=\write8
-\openout8 = `relatorioProjeto.lot'.
-
-
-
-[9{C:/Users/lmnam/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/libertine/lbtn_naooyc.enc}]
-
-[10
-
-
 ]
+Underfull \hbox (badness 10000) in paragraph at lines 100--101
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 102--103
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 104--105
+
+ []
+
+
 Underfull \hbox (badness 10000) in paragraph at lines 106--107
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 108--109
 
- []
+[9]
 
-
-Underfull \hbox (badness 10000) in paragraph at lines 110--111
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 112--113
-
- []
-
-
-
-[11]
-
-[12
+[10
 
 
 ]
 chapter 1.
-<../../src.jpg, id=139, 207.174pt x 307.3884pt>
-File: ../../src.jpg Graphic file (type jpg)
-<use ../../src.jpg>
-Package pdftex.def Info: ../../src.jpg  used on input line 130.
+LaTeX Font Info:    Font shape `T1/LinuxLibertineT-TLF/b/n' will be
+(Font)              scaled to size 10.95pt on input line 116.
+<../../images/in/src.jpg, id=144, 207.174pt x 307.3884pt>
+File: ../../images/in/src.jpg Graphic file (type jpg)
+<use ../../images/in/src.jpg>
+Package pdftex.def Info: ../../images/in/src.jpg  used on input line 124.
 (pdftex.def)             Requested size: 174.76988pt x 259.3114pt.
 LaTeX Font Info:    Font shape `T1/LinuxLibertineT-TLF/m/n' will be
-(Font)              scaled to size 10.0pt on input line 131.
-<../../output_sequential.jpg, id=140, 863.225pt x 1280.785pt>
-File: ../../output_sequential.jpg Graphic file (type jpg)
-<use ../../output_sequential.jpg>
-Package pdftex.def Info: ../../output_sequential.jpg  used on input line 136.
+(Font)              scaled to size 10.0pt on input line 125.
+<../../images/out/src_sequential.jpg, id=145, 863.225pt x 1280.785pt>
+File: ../../images/out/src_sequential.jpg Graphic file (type jpg)
+<use ../../images/out/src_sequential.jpg>
+Package pdftex.def Info: ../../images/out/src_sequential.jpg  used on input line 130.
 (pdftex.def)             Requested size: 174.76988pt x 259.2989pt.
 
 
 [1
 
 
- <../../src.jpg> <../../output_sequential.jpg>]
+{C:/Users/lmnam/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/libertine/lbtn_nh77jq.enc} <../../images/in/src.jpg> <../../images/out/src_sequential.jpg>]
 LaTeX Font Info:    Font shape `T1/LinuxLibertineT-TLF/m/n' will be
-(Font)              scaled to size 8.0pt on input line 151.
+(Font)              scaled to size 8.0pt on input line 145.
 LaTeX Font Info:    Font shape `T1/LinuxLibertineT-TLF/m/n' will be
-(Font)              scaled to size 6.0pt on input line 151.
+(Font)              scaled to size 6.0pt on input line 145.
 
 
 File: logos/logo_DEI_big_transparente.png Graphic file (type png)
 <use logos/logo_DEI_big_transparente.png>
-Package pdftex.def Info: logos/logo_DEI_big_transparente.png  used on input line 156.
+Package pdftex.def Info: logos/logo_DEI_big_transparente.png  used on input line 150.
 (pdftex.def)             Requested size: 38.84038pt x 15.29182pt.
 File: logos/logoisep.png Graphic file (type png)
 <use logos/logoisep.png>
-Package pdftex.def Info: logos/logoisep.png  used on input line 156.
+Package pdftex.def Info: logos/logoisep.png  used on input line 150.
 (pdftex.def)             Requested size: 58.25465pt x 22.2305pt.
 [2]
 chapter 2.
@@ -1031,29 +989,29 @@ chapter 2.
 ]
 chapter 3.
 
-Overfull \hbox (74.51718pt too wide) in paragraph at lines 183--184
+Overfull \hbox (74.51718pt too wide) in paragraph at lines 177--178
 \T1/LinuxLibertineT-TLF/m/n/10.95 ten-dem a classe abs-trata \T1/cmtt/m/n/10.95 AbstractFilter\T1/LinuxLibertineT-TLF/m/n/10.95 , que dis-po-ni-bi-liza os mé-to-dos uti-li-tá-rios \T1/cmtt/m/n/10.95 computeLuminosity\T1/LinuxLibertineT-TLF/m/n/10.95 ,
  []
 
 
-Overfull \hbox (12.84694pt too wide) in paragraph at lines 183--184
+Overfull \hbox (12.84694pt too wide) in paragraph at lines 177--178
 \T1/cmtt/m/n/10.95 buildCumulativeHistogram \T1/LinuxLibertineT-TLF/m/n/10.95 e \T1/cmtt/m/n/10.95 equalizedLuminosity\T1/LinuxLibertineT-TLF/m/n/10.95 . Os mé-to-dos \T1/cmtt/m/n/10.95 computeHistogram
  []
 
 
-Overfull \hbox (12.07971pt too wide) in paragraph at lines 183--184
+Overfull \hbox (12.07971pt too wide) in paragraph at lines 177--178
 \T1/LinuxLibertineT-TLF/m/n/10.95 e \T1/cmtt/m/n/10.95 applyEqualization \T1/LinuxLibertineT-TLF/m/n/10.95 da \T1/cmtt/m/n/10.95 SequentialFilter \T1/LinuxLibertineT-TLF/m/n/10.95 têm vi-si-bi-li-dade de pa-cote (\T1/LinuxLibertineT-TLF/m/it/10.95 package-private\T1/LinuxLibertineT-TLF/m/n/10.95 )
  []
 
 LaTeX Font Info:    Font shape `T1/LinuxBiolinumT-TLF/b/n' will be
-(Font)              scaled to size 14.4pt on input line 186.
+(Font)              scaled to size 14.4pt on input line 180.
 
 Underfull \vbox (badness 3514) has occurred while \output is active []
 
 
 
 [5]
-Overfull \hbox (13.90634pt too wide) in paragraph at lines 216--217
+Overfull \hbox (13.90634pt too wide) in paragraph at lines 210--211
 []\T1/LinuxLibertineT-TLF/b/n/10.95 Fase 2 (se-quen-cial): \T1/LinuxLibertineT-TLF/m/n/10.95 O his-to-grama cu-mu-la-tivo é cal-cu-lado se-quen-ci-al-mente (O(256)). 
  []
 
@@ -1061,29 +1019,29 @@ Overfull \hbox (13.90634pt too wide) in paragraph at lines 216--217
 
 File: logos/logo_DEI_big_transparente.png Graphic file (type png)
 <use logos/logo_DEI_big_transparente.png>
-Package pdftex.def Info: logos/logo_DEI_big_transparente.png  used on input line 244.
+Package pdftex.def Info: logos/logo_DEI_big_transparente.png  used on input line 238.
 (pdftex.def)             Requested size: 38.84038pt x 15.29182pt.
 File: logos/logoisep.png Graphic file (type png)
 <use logos/logoisep.png>
-Package pdftex.def Info: logos/logoisep.png  used on input line 244.
+Package pdftex.def Info: logos/logoisep.png  used on input line 238.
 (pdftex.def)             Requested size: 58.25465pt x 22.2305pt.
 [6]
 
 File: logos/logoisep.png Graphic file (type png)
 <use logos/logoisep.png>
-Package pdftex.def Info: logos/logoisep.png  used on input line 276.
+Package pdftex.def Info: logos/logoisep.png  used on input line 270.
 (pdftex.def)             Requested size: 58.25465pt x 22.2305pt.
 File: logos/logo_DEI_big_transparente.png Graphic file (type png)
 <use logos/logo_DEI_big_transparente.png>
-Package pdftex.def Info: logos/logo_DEI_big_transparente.png  used on input line 276.
+Package pdftex.def Info: logos/logo_DEI_big_transparente.png  used on input line 270.
 (pdftex.def)             Requested size: 38.84038pt x 15.29182pt.
 [7]
-Overfull \hbox (20.08723pt too wide) in paragraph at lines 304--305
+Overfull \hbox (20.08723pt too wide) in paragraph at lines 298--299
 []\T1/cmtt/m/n/10.95 supplyAsync \T1/LinuxLibertineT-TLF/m/n/10.95 lança as ta-re-fas de his-to-grama as-sin-cro-na-mente num \T1/cmtt/m/n/10.95 ExecutorService
  []
 
 
-Overfull \hbox (0.76968pt too wide) in paragraph at lines 305--306
+Overfull \hbox (0.76968pt too wide) in paragraph at lines 299--300
 []\T1/cmtt/m/n/10.95 CompletableFuture.allOf(...).thenApply(...) \T1/LinuxLibertineT-TLF/m/n/10.95 aguarda a con-clu-são de to-
  []
 
@@ -1091,41 +1049,82 @@ Overfull \hbox (0.76968pt too wide) in paragraph at lines 305--306
 
 File: logos/logo_DEI_big_transparente.png Graphic file (type png)
 <use logos/logo_DEI_big_transparente.png>
-Package pdftex.def Info: logos/logo_DEI_big_transparente.png  used on input line 310.
+Package pdftex.def Info: logos/logo_DEI_big_transparente.png  used on input line 304.
 (pdftex.def)             Requested size: 38.84038pt x 15.29182pt.
 File: logos/logoisep.png Graphic file (type png)
 <use logos/logoisep.png>
-Package pdftex.def Info: logos/logoisep.png  used on input line 310.
+Package pdftex.def Info: logos/logoisep.png  used on input line 304.
 (pdftex.def)             Requested size: 58.25465pt x 22.2305pt.
 [8]
-
-File: logos/logoisep.png Graphic file (type png)
-<use logos/logoisep.png>
-Package pdftex.def Info: logos/logoisep.png  used on input line 340.
-(pdftex.def)             Requested size: 58.25465pt x 22.2305pt.
-File: logos/logo_DEI_big_transparente.png Graphic file (type png)
-<use logos/logo_DEI_big_transparente.png>
-Package pdftex.def Info: logos/logo_DEI_big_transparente.png  used on input line 340.
-(pdftex.def)             Requested size: 38.84038pt x 15.29182pt.
-[9]
-Overfull \hbox (33.22209pt too wide) in paragraph at lines 347--357
- [][] 
+Overfull \hbox (20.2293pt too wide) in paragraph at lines 324--325
+\T1/LinuxLibertineT-TLF/m/n/10.95 O ben-ch-mark foi exe-cu-tado se-pa-ra-da-mente com qua-tro \T1/LinuxLibertineT-TLF/m/it/10.95 Gar-bage Col-lec-tors \T1/LinuxLibertineT-TLF/m/n/10.95 da JVM (\T1/cmtt/m/n/10.95 -Xms256m
  []
 
 
 
+File: logos/logoisep.png Graphic file (type png)
+<use logos/logoisep.png>
+Package pdftex.def Info: logos/logoisep.png  used on input line 335.
+(pdftex.def)             Requested size: 58.25465pt x 22.2305pt.
 File: logos/logo_DEI_big_transparente.png Graphic file (type png)
 <use logos/logo_DEI_big_transparente.png>
-Package pdftex.def Info: logos/logo_DEI_big_transparente.png  used on input line 370.
+Package pdftex.def Info: logos/logo_DEI_big_transparente.png  used on input line 335.
+(pdftex.def)             Requested size: 38.84038pt x 15.29182pt.
+[9]
+LaTeX Font Info:    Font shape `TS1/LinuxLibertineT-TLF/b/n' will be
+(Font)              scaled to size 10.95pt on input line 346.
+
+Overfull \hbox (96.36392pt too wide) in paragraph at lines 342--352
+ [][] 
+ []
+
+<../../images/charts/chart_04_gc_timing.png, id=269, 578.16pt x 361.35pt>
+File: ../../images/charts/chart_04_gc_timing.png Graphic file (type png)
+<use ../../images/charts/chart_04_gc_timing.png>
+Package pdftex.def Info: ../../images/charts/chart_04_gc_timing.png  used on input line 358.
+(pdftex.def)             Requested size: 318.47458pt x 199.04637pt.
+<../../images/charts/chart_05_gc_pauses.png, id=270, 578.16pt x 361.35pt>
+File: ../../images/charts/chart_05_gc_pauses.png Graphic file (type png)
+<use ../../images/charts/chart_05_gc_pauses.png>
+Package pdftex.def Info: ../../images/charts/chart_05_gc_pauses.png  used on input line 365.
+(pdftex.def)             Requested size: 318.47458pt x 199.04637pt.
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+
+
+File: logos/logo_DEI_big_transparente.png Graphic file (type png)
+<use logos/logo_DEI_big_transparente.png>
+Package pdftex.def Info: logos/logo_DEI_big_transparente.png  used on input line 369.
 (pdftex.def)             Requested size: 38.84038pt x 15.29182pt.
 File: logos/logoisep.png Graphic file (type png)
 <use logos/logoisep.png>
-Package pdftex.def Info: logos/logoisep.png  used on input line 370.
+Package pdftex.def Info: logos/logoisep.png  used on input line 369.
 (pdftex.def)             Requested size: 58.25465pt x 22.2305pt.
-[10]
+[10{C:/Users/lmnam/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/libertine/lbtn_7f4ce4.enc} <../../images/charts/chart_04_gc_timing.png>]
+Overfull \hbox (17.50705pt too wide) in paragraph at lines 379--380
+[]\T1/LinuxLibertineT-TLF/b/n/10.95 Serviço in-te-ra-tivo (la-tên-cia pre-vi-sí-vel): \T1/LinuxLibertineT-TLF/m/n/10.95 G1GC com \T1/cmtt/m/n/10.95 -XX:MaxGCPauseMillis=100\T1/LinuxLibertineT-TLF/m/n/10.95 . 
+ []
+
+
+
+File: logos/logoisep.png Graphic file (type png)
+<use logos/logoisep.png>
+Package pdftex.def Info: logos/logoisep.png  used on input line 390.
+(pdftex.def)             Requested size: 58.25465pt x 22.2305pt.
+File: logos/logo_DEI_big_transparente.png Graphic file (type png)
+<use logos/logo_DEI_big_transparente.png>
+Package pdftex.def Info: logos/logo_DEI_big_transparente.png  used on input line 390.
+(pdftex.def)             Requested size: 38.84038pt x 15.29182pt.
+[11 <../../images/charts/chart_05_gc_pauses.png>]
+
+[12
+
+
+]
 chapter 4.
 
-Overfull \hbox (23.24176pt too wide) in paragraph at lines 398--408
+Overfull \hbox (23.24176pt too wide) in paragraph at lines 418--428
  [][] 
  []
 
@@ -1134,11 +1133,8 @@ Underfull \vbox (badness 7558) has occurred while \output is active []
 
 
 
-[11
-
-
-]
-Overfull \hbox (26.04726pt too wide) in paragraph at lines 410--411
+[13]
+Overfull \hbox (26.04726pt too wide) in paragraph at lines 430--431
 \T1/LinuxLibertineT-TLF/m/n/10.95 A op-ção por his-to-gra-mas par-ci-ais por th-read (sem \T1/cmtt/m/n/10.95 synchronized \T1/LinuxLibertineT-TLF/m/n/10.95 nem \T1/cmtt/m/n/10.95 AtomicIntegerArray\T1/LinuxLibertineT-TLF/m/n/10.95 )
  []
 
@@ -1146,17 +1142,148 @@ Overfull \hbox (26.04726pt too wide) in paragraph at lines 410--411
 
 File: logos/logo_DEI_big_transparente.png Graphic file (type png)
 <use logos/logo_DEI_big_transparente.png>
-Package pdftex.def Info: logos/logo_DEI_big_transparente.png  used on input line 413.
+Package pdftex.def Info: logos/logo_DEI_big_transparente.png  used on input line 433.
 (pdftex.def)             Requested size: 38.84038pt x 15.29182pt.
 File: logos/logoisep.png Graphic file (type png)
 <use logos/logoisep.png>
-Package pdftex.def Info: logos/logoisep.png  used on input line 413.
+Package pdftex.def Info: logos/logoisep.png  used on input line 433.
 (pdftex.def)             Requested size: 58.25465pt x 22.2305pt.
-[12]
+[14]
 chapter 5.
 
-Overfull \hbox (65.34038pt too wide) in paragraph at lines 422--423
-[]\T1/LinuxLibertineT-TLF/b/n/10.95 Metodologia: \T1/LinuxLibertineT-TLF/m/n/10.95 3 exe-cu-ções de aque-ci-mento (JIT), mé-dia de 5 me-di-ções com \T1/cmtt/m/n/10.95 System.nanoTime() 
+Overfull \hbox (3.35356pt too wide) in paragraph at lines 441--442
+[]\T1/LinuxLibertineT-TLF/b/n/10.95 Processadores: \T1/LinuxLibertineT-TLF/m/n/10.95 22 ló-gi-cos (\T1/cmtt/m/n/10.95 Runtime.getRuntime().availableProcessors()\T1/LinuxLibertineT-TLF/m/n/10.95 ) 
+ []
+
+LaTeX Font Info:    Trying to load font information for TS1+LinuxBiolinumT-TLF on input line 447.
+(C:\Users\lmnam\AppData\Local\Programs\MiKTeX\tex/latex/libertine\ts1linuxbiolinumt-tlf.fd
+File: TS1LinuxBiolinumT-TLF.fd 2017/03/20 (autoinst) Font definitions for TS1/LinuxBiolinumT-TLF.
+)
+LaTeX Font Info:    Font shape `TS1/LinuxBiolinumT-TLF/b/n' will be
+(Font)              scaled to size 14.4pt on input line 447.
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+
+
+[15
+
+
+]
+<../../images/charts/chart_01_speedup_threads.png, id=308, 578.16pt x 361.35pt>
+File: ../../images/charts/chart_01_speedup_threads.png Graphic file (type png)
+<use ../../images/charts/chart_01_speedup_threads.png>
+Package pdftex.def Info: ../../images/charts/chart_01_speedup_threads.png  used on input line 487.
+(pdftex.def)             Requested size: 330.1255pt x 206.32452pt.
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+
+
+File: logos/logo_DEI_big_transparente.png Graphic file (type png)
+<use logos/logo_DEI_big_transparente.png>
+Package pdftex.def Info: logos/logo_DEI_big_transparente.png  used on input line 491.
+(pdftex.def)             Requested size: 38.84038pt x 15.29182pt.
+File: logos/logoisep.png Graphic file (type png)
+<use logos/logoisep.png>
+Package pdftex.def Info: logos/logoisep.png  used on input line 491.
+(pdftex.def)             Requested size: 58.25465pt x 22.2305pt.
+[16{C:/Users/lmnam/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/libertine/lbtn_mmutss.enc}]
+<../../images/charts/chart_02_time_by_size.png, id=315, 578.16pt x 361.35pt>
+File: ../../images/charts/chart_02_time_by_size.png Graphic file (type png)
+<use ../../images/charts/chart_02_time_by_size.png>
+Package pdftex.def Info: ../../images/charts/chart_02_time_by_size.png  used on input line 502.
+(pdftex.def)             Requested size: 310.70532pt x 194.18875pt.
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+
+
+File: logos/logoisep.png Graphic file (type png)
+<use logos/logoisep.png>
+Package pdftex.def Info: logos/logoisep.png  used on input line 506.
+(pdftex.def)             Requested size: 58.25465pt x 22.2305pt.
+File: logos/logo_DEI_big_transparente.png Graphic file (type png)
+<use logos/logo_DEI_big_transparente.png>
+Package pdftex.def Info: logos/logo_DEI_big_transparente.png  used on input line 506.
+(pdftex.def)             Requested size: 38.84038pt x 15.29182pt.
+[17 <../../images/charts/chart_01_speedup_threads.png>]
+<../../images/charts/chart_03_speedup_by_size.png, id=323, 650.43pt x 361.35pt>
+File: ../../images/charts/chart_03_speedup_by_size.png Graphic file (type png)
+<use ../../images/charts/chart_03_speedup_by_size.png>
+Package pdftex.def Info: ../../images/charts/chart_03_speedup_by_size.png  used on input line 527.
+(pdftex.def)             Requested size: 349.53978pt x 194.19427pt.
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+
+
+File: logos/logo_DEI_big_transparente.png Graphic file (type png)
+<use logos/logo_DEI_big_transparente.png>
+Package pdftex.def Info: logos/logo_DEI_big_transparente.png  used on input line 531.
+(pdftex.def)             Requested size: 38.84038pt x 15.29182pt.
+File: logos/logoisep.png Graphic file (type png)
+<use logos/logoisep.png>
+Package pdftex.def Info: logos/logoisep.png  used on input line 531.
+(pdftex.def)             Requested size: 58.25465pt x 22.2305pt.
+[18 <../../images/charts/chart_02_time_by_size.png>]
+LaTeX Info: Symbol \textrightarrow not provided by
+            font family LinuxLibertineT-TLF in TS1 encoding.
+            Default family used instead on input line 532.
+<../../images/charts/chart_06_time_threads_fhd.png, id=331, 578.16pt x 361.35pt>
+File: ../../images/charts/chart_06_time_threads_fhd.png Graphic file (type png)
+<use ../../images/charts/chart_06_time_threads_fhd.png>
+Package pdftex.def Info: ../../images/charts/chart_06_time_threads_fhd.png  used on input line 544.
+(pdftex.def)             Requested size: 330.1255pt x 206.32452pt.
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+
+
+File: logos/logoisep.png Graphic file (type png)
+<use logos/logoisep.png>
+Package pdftex.def Info: logos/logoisep.png  used on input line 548.
+(pdftex.def)             Requested size: 58.25465pt x 22.2305pt.
+File: logos/logo_DEI_big_transparente.png Graphic file (type png)
+<use logos/logo_DEI_big_transparente.png>
+Package pdftex.def Info: logos/logo_DEI_big_transparente.png  used on input line 548.
+(pdftex.def)             Requested size: 38.84038pt x 15.29182pt.
+[19 <../../images/charts/chart_03_speedup_by_size.png>]
+
+File: logos/logo_DEI_big_transparente.png Graphic file (type png)
+<use logos/logo_DEI_big_transparente.png>
+Package pdftex.def Info: logos/logo_DEI_big_transparente.png  used on input line 566.
+(pdftex.def)             Requested size: 38.84038pt x 15.29182pt.
+File: logos/logoisep.png Graphic file (type png)
+<use logos/logoisep.png>
+Package pdftex.def Info: logos/logoisep.png  used on input line 566.
+(pdftex.def)             Requested size: 58.25465pt x 22.2305pt.
+[20 <../../images/charts/chart_06_time_threads_fhd.png>]
+LaTeX Font Info:    Font shape `T1/cmtt/bx/n' in size <10.95> not available
+(Font)              Font shape `T1/cmtt/m/n' tried instead on input line 566.
+
+
+File: logos/logoisep.png Graphic file (type png)
+<use logos/logoisep.png>
+Package pdftex.def Info: logos/logoisep.png  used on input line 570.
+(pdftex.def)             Requested size: 58.25465pt x 22.2305pt.
+File: logos/logo_DEI_big_transparente.png Graphic file (type png)
+<use logos/logo_DEI_big_transparente.png>
+Package pdftex.def Info: logos/logo_DEI_big_transparente.png  used on input line 570.
+(pdftex.def)             Requested size: 38.84038pt x 15.29182pt.
+[21]
+
+[22
+
+
+]
+chapter 6.
+LaTeX Info: Symbol \textrightarrow not provided by
+            font family LinuxLibertineT-TLF in TS1 encoding.
+            Default family used instead on input line 578.
+
+Overfull \hbox (29.7498pt too wide) in paragraph at lines 591--602
+ [][] 
  []
 
 
@@ -1164,95 +1291,100 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 
 
 
-[13
-
-
-]
-LaTeX Font Info:    Font shape `TS1/LinuxLibertineT-TLF/b/n' will be
-(Font)              scaled to size 10.95pt on input line 462.
-
+[23]
 
 File: logos/logo_DEI_big_transparente.png Graphic file (type png)
 <use logos/logo_DEI_big_transparente.png>
-Package pdftex.def Info: logos/logo_DEI_big_transparente.png  used on input line 468.
+Package pdftex.def Info: logos/logo_DEI_big_transparente.png  used on input line 620.
 (pdftex.def)             Requested size: 38.84038pt x 15.29182pt.
 File: logos/logoisep.png Graphic file (type png)
 <use logos/logoisep.png>
-Package pdftex.def Info: logos/logoisep.png  used on input line 468.
+Package pdftex.def Info: logos/logoisep.png  used on input line 620.
 (pdftex.def)             Requested size: 58.25465pt x 22.2305pt.
-[14{C:/Users/lmnam/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/libertine/lbtn_7f4ce4.enc}]
-Underfull \vbox (badness 2393) has occurred while \output is active []
-
-
+[24]
 
 File: logos/logoisep.png Graphic file (type png)
 <use logos/logoisep.png>
-Package pdftex.def Info: logos/logoisep.png  used on input line 502.
+Package pdftex.def Info: logos/logoisep.png  used on input line 627.
 (pdftex.def)             Requested size: 58.25465pt x 22.2305pt.
 File: logos/logo_DEI_big_transparente.png Graphic file (type png)
 <use logos/logo_DEI_big_transparente.png>
-Package pdftex.def Info: logos/logo_DEI_big_transparente.png  used on input line 502.
+Package pdftex.def Info: logos/logo_DEI_big_transparente.png  used on input line 627.
 (pdftex.def)             Requested size: 38.84038pt x 15.29182pt.
-[15]
-LaTeX Font Info:    Font shape `T1/cmtt/bx/n' in size <10.95> not available
-(Font)              Font shape `T1/cmtt/m/n' tried instead on input line 508.
+[25]
 
-
-File: logos/logo_DEI_big_transparente.png Graphic file (type png)
-<use logos/logo_DEI_big_transparente.png>
-Package pdftex.def Info: logos/logo_DEI_big_transparente.png  used on input line 512.
-(pdftex.def)             Requested size: 38.84038pt x 15.29182pt.
-File: logos/logoisep.png Graphic file (type png)
-<use logos/logoisep.png>
-Package pdftex.def Info: logos/logoisep.png  used on input line 512.
-(pdftex.def)             Requested size: 58.25465pt x 22.2305pt.
-[16]
-chapter 6.
-
-
-[17
+[26
 
 
 ]
-
-[18
-
-
-]
-Underfull \hbox (badness 5302) in paragraph at lines 551--555
+Underfull \hbox (badness 5302) in paragraph at lines 645--649
 []\T1/LinuxLibertineT-TLF/m/n/10.95 Oracle Cor-po-ra-tion.  \T1/LinuxLibertineT-TLF/m/it/10.95 Fork/-Join Fra-mework\T1/LinuxLibertineT-TLF/m/n/10.95 .  Java Do-cu-men-ta-tion, 2024.
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 551--555
+Underfull \hbox (badness 10000) in paragraph at lines 645--649
 []$\T1/cmtt/m/n/10.95 https : / / docs . oracle . com / javase / tutorial / essential / concurrency /
  []
 
 
-Underfull \hbox (badness 5924) in paragraph at lines 557--561
+Underfull \hbox (badness 5924) in paragraph at lines 651--655
 []\T1/LinuxLibertineT-TLF/m/n/10.95 Oracle Cor-po-ra-tion.  \T1/LinuxLibertineT-TLF/m/it/10.95 Com-ple-ta-ble-Fu-ture API\T1/LinuxLibertineT-TLF/m/n/10.95 .  Java SE 21 Do-cu-men-ta-
  []
 
 
 
-[19] (relatorioProjeto.aux)
+[27] (relatorioProjeto.aux)
  ***********
 LaTeX2e <2025-06-01> patch level 1
 L3 programming layer <2020/03/25>
  ***********
+
+
+LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
+
  ) 
 Here is how much of TeX's memory you used:
- 24624 strings out of 468080
- 467400 string characters out of 5425772
+ 24712 strings out of 468080
+ 470561 string characters out of 5425772
  1181346 words of memory out of 5000000
- 52725 multiletter control sequences out of 15000+600000
- 700199 words of font info for 99 fonts, out of 8000000 for 9000
+ 52789 multiletter control sequences out of 15000+600000
+ 701245 words of font info for 102 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  108i,23n,124p,11261b,1230s stack positions out of 10000i,1000n,20000p,200000b,200000s
- <C:\Users\lmnam\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ectt1000.pk> <C:\Users\lmnam\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ectt1095.pk> <C:\Users\lmnam\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ectt1440.pk><C:/Users/lmnam/AppData/Local/Programs/MiKTeX/fonts/type1/public/libertine/LinBiolinumTB.pfb><C:/Users/lmnam/AppData/Local/Programs/MiKTeX/fonts/type1/public/libertine/LinLibertineT.pfb><C:/Users/lmnam/AppData/Local/Programs/MiKTeX/fonts/type1/public/libertine/LinLibertineTB.pfb><C:/Users/lmnam/AppData/Local/Programs/MiKTeX/fonts/type1/public/libertine/LinLibertineTI.pfb><C:/Users/lmnam/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmex10.pfb><C:/Users/lmnam/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Users/lmnam/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Users/lmnam/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy10.pfb>
-Output written on relatorioProjeto.pdf (31 pages, 790746 bytes).
+
+pdfTeX warning (dest): name{table.caption.17} has been referenced but does not exist, replaced by a fixed one
+
+
+pdfTeX warning (dest): name{table.caption.14} has been referenced but does not exist, replaced by a fixed one
+
+
+pdfTeX warning (dest): name{table.caption.11} has been referenced but does not exist, replaced by a fixed one
+
+
+pdfTeX warning (dest): name{table.caption.7} has been referenced but does not exist, replaced by a fixed one
+
+
+pdfTeX warning (dest): name{figure.caption.16} has been referenced but does not exist, replaced by a fixed one
+
+
+pdfTeX warning (dest): name{figure.caption.13} has been referenced but does not exist, replaced by a fixed one
+
+
+pdfTeX warning (dest): name{figure.caption.9} has been referenced but does not exist, replaced by a fixed one
+
+
+pdfTeX warning (dest): name{figure.caption.6} has been referenced but does not exist, replaced by a fixed one
+
+
+pdfTeX warning (dest): name{chapter*.18} has been referenced but does not exist, replaced by a fixed one
+
+
+pdfTeX warning (dest): name{chapter*.5} has been referenced but does not exist, replaced by a fixed one
+
+ <C:\Users\lmnam\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\tcrm1095.pk> <C:\Users\lmnam\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ectt1000.pk> <C:\Users\lmnam\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ectt1095.pk> <C:\Users\lmnam\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ectt1440.pk><C:/Users/lmnam/AppData/Local/Programs/MiKTeX/fonts/type1/public/libertine/LinBiolinumTB.pfb><C:/Users/lmnam/AppData/Local/Programs/MiKTeX/fonts/type1/public/libertine/LinLibertineT.pfb><C:/Users/lmnam/AppData/Local/Programs/MiKTeX/fonts/type1/public/libertine/LinLibertineTB.pfb><C:/Users/lmnam/AppData/Local/Programs/MiKTeX/fonts/type1/public/libertine/LinLibertineTI.pfb><C:/Users/lmnam/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmex10.pfb><C:/Users/lmnam/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Users/lmnam/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Users/lmnam/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy10.pfb>
+Output written on relatorioProjeto.pdf (37 pages, 1128836 bytes).
 PDF statistics:
- 643 PDF objects out of 1000 (max. 8388607)
- 159 named destinations out of 1000 (max. 500000)
- 269 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 728 PDF objects out of 1000 (max. 8388607)
+ 183 named destinations out of 1000 (max. 500000)
+ 299 words of extra memory for PDF output out of 10000 (max. 10000000)
 

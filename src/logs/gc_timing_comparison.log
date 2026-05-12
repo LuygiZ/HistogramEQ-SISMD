@@ -1,0 +1,192 @@
+=== SerialGC ===
+Loading image: images/in/photo_1920x1080.jpg
+Image: 1920 x 1080  (2,073,600 pixels)
+
+Available processors: 22
+
+  Benchmarking: Sequential ... 43 ms
+  Benchmarking: Multithreaded - no pool (1T) ... 44 ms
+  Benchmarking: Multithreaded - no pool (2T) ... 24 ms
+  Benchmarking: Multithreaded - no pool (4T) ... 14 ms
+  Benchmarking: Multithreaded - no pool (8T) ... 11 ms
+  Benchmarking: Multithreaded - no pool (22T) ... 25 ms
+  Benchmarking: Thread Pool (1T) ... 42 ms
+  Benchmarking: Thread Pool (2T) ... 24 ms
+  Benchmarking: Thread Pool (4T) ... 14 ms
+  Benchmarking: Thread Pool (8T) ... 10 ms
+  Benchmarking: Thread Pool (22T) ... 10 ms
+  Benchmarking: Fork/Join ... 9 ms
+  Benchmarking: CompletableFuture (1T) ... 43 ms
+  Benchmarking: CompletableFuture (2T) ... 23 ms
+  Benchmarking: CompletableFuture (4T) ... 16 ms
+  Benchmarking: CompletableFuture (8T) ... 10 ms
+  Benchmarking: CompletableFuture (22T) ... 8 ms
+
+------------------------------------------------------------------------------
+| Implementation                             | Time(ms) |    Mem(MB) |  Speedup |
+------------------------------------------------------------------------------
+| Sequential                                 |       43 |      72.57 |    1.00x |
+| Multithreaded - no pool (1T)               |       44 |      74.36 |    0.98x |
+| Multithreaded - no pool (2T)               |       24 |      75.65 |    1.79x |
+| Multithreaded - no pool (4T)               |       14 |      76.38 |    3.07x |
+| Multithreaded - no pool (8T)               |       11 |      80.39 |    3.91x |
+| Multithreaded - no pool (22T)              |       25 |      82.83 |    1.72x |
+| Thread Pool (1T)                           |       42 |      71.98 |    1.02x |
+| Thread Pool (2T)                           |       24 |      72.86 |    1.79x |
+| Thread Pool (4T)                           |       14 |      73.89 |    3.07x |
+| Thread Pool (8T)                           |       10 |      74.62 |    4.30x |
+| Thread Pool (22T)                          |       10 |      75.28 |    4.30x |
+| Fork/Join                                  |        9 |      75.91 |    4.78x |
+| CompletableFuture (1T)                     |       43 |      71.80 |    1.00x |
+| CompletableFuture (2T)                     |       23 |      73.25 |    1.87x |
+| CompletableFuture (4T)                     |       16 |      74.14 |    2.69x |
+| CompletableFuture (8T)                     |       10 |      74.56 |    4.30x |
+| CompletableFuture (22T)                    |        8 |      75.02 |    5.38x |
+------------------------------------------------------------------------------
+
+Correctness reference -> images/out/photo_1920x1080_sequential.jpg
+
+=== ParallelGC ===
+Loading image: images/in/photo_1920x1080.jpg
+Image: 1920 x 1080  (2,073,600 pixels)
+
+Available processors: 22
+
+  Benchmarking: Sequential ... 41 ms
+  Benchmarking: Multithreaded - no pool (1T) ... 41 ms
+  Benchmarking: Multithreaded - no pool (2T) ... 25 ms
+  Benchmarking: Multithreaded - no pool (4T) ... 14 ms
+  Benchmarking: Multithreaded - no pool (8T) ... 12 ms
+  Benchmarking: Multithreaded - no pool (22T) ... 10 ms
+  Benchmarking: Thread Pool (1T) ... 41 ms
+  Benchmarking: Thread Pool (2T) ... 24 ms
+  Benchmarking: Thread Pool (4T) ... 15 ms
+  Benchmarking: Thread Pool (8T) ... 12 ms
+  Benchmarking: Thread Pool (22T) ... 10 ms
+  Benchmarking: Fork/Join ... 12 ms
+  Benchmarking: CompletableFuture (1T) ... 46 ms
+  Benchmarking: CompletableFuture (2T) ... 28 ms
+  Benchmarking: CompletableFuture (4T) ... 18 ms
+  Benchmarking: CompletableFuture (8T) ... 14 ms
+  Benchmarking: CompletableFuture (22T) ... 12 ms
+
+------------------------------------------------------------------------------
+| Implementation                             | Time(ms) |    Mem(MB) |  Speedup |
+------------------------------------------------------------------------------
+| Sequential                                 |       41 |      73.65 |    1.00x |
+| Multithreaded - no pool (1T)               |       41 |      95.26 |    1.00x |
+| Multithreaded - no pool (2T)               |       25 |     112.92 |    1.64x |
+| Multithreaded - no pool (4T)               |       14 |     133.81 |    2.93x |
+| Multithreaded - no pool (8T)               |       12 |     200.70 |    3.42x |
+| Multithreaded - no pool (22T)              |       10 |     242.32 |    4.10x |
+| Thread Pool (1T)                           |       41 |      74.50 |    1.00x |
+| Thread Pool (2T)                           |       24 |      85.41 |    1.71x |
+| Thread Pool (4T)                           |       15 |      83.64 |    2.73x |
+| Thread Pool (8T)                           |       12 |      85.62 |    3.42x |
+| Thread Pool (22T)                          |       10 |      94.96 |    4.10x |
+| Fork/Join                                  |       12 |      81.89 |    3.42x |
+| CompletableFuture (1T)                     |       46 |      72.36 |    0.89x |
+| CompletableFuture (2T)                     |       28 |      79.46 |    1.46x |
+| CompletableFuture (4T)                     |       18 |      83.70 |    2.28x |
+| CompletableFuture (8T)                     |       14 |      85.27 |    2.93x |
+| CompletableFuture (22T)                    |       12 |      95.09 |    3.42x |
+------------------------------------------------------------------------------
+
+Correctness reference -> images/out/photo_1920x1080_sequential.jpg
+
+=== G1GC ===
+Loading image: images/in/photo_1920x1080.jpg
+Image: 1920 x 1080  (2,073,600 pixels)
+
+Available processors: 22
+
+  Benchmarking: Sequential ... 62 ms
+  Benchmarking: Multithreaded - no pool (1T) ... 54 ms
+  Benchmarking: Multithreaded - no pool (2T) ... 38 ms
+  Benchmarking: Multithreaded - no pool (4T) ... 30 ms
+  Benchmarking: Multithreaded - no pool (8T) ... 27 ms
+  Benchmarking: Multithreaded - no pool (22T) ... 23 ms
+  Benchmarking: Thread Pool (1T) ... 63 ms
+  Benchmarking: Thread Pool (2T) ... 40 ms
+  Benchmarking: Thread Pool (4T) ... 31 ms
+  Benchmarking: Thread Pool (8T) ... 26 ms
+  Benchmarking: Thread Pool (22T) ... 24 ms
+  Benchmarking: Fork/Join ... 28 ms
+  Benchmarking: CompletableFuture (1T) ... 63 ms
+  Benchmarking: CompletableFuture (2T) ... 40 ms
+  Benchmarking: CompletableFuture (4T) ... 30 ms
+  Benchmarking: CompletableFuture (8T) ... 25 ms
+  Benchmarking: CompletableFuture (22T) ... 25 ms
+
+------------------------------------------------------------------------------
+| Implementation                             | Time(ms) |    Mem(MB) |  Speedup |
+------------------------------------------------------------------------------
+| Sequential                                 |       62 |      73.00 |    1.00x |
+| Multithreaded - no pool (1T)               |       54 |      73.10 |    1.15x |
+| Multithreaded - no pool (2T)               |       38 |      73.83 |    1.63x |
+| Multithreaded - no pool (4T)               |       30 |      73.99 |    2.07x |
+| Multithreaded - no pool (8T)               |       27 |      75.11 |    2.30x |
+| Multithreaded - no pool (22T)              |       23 |      75.90 |    2.70x |
+| Thread Pool (1T)                           |       63 |      73.44 |    0.98x |
+| Thread Pool (2T)                           |       40 |      73.58 |    1.55x |
+| Thread Pool (4T)                           |       31 |      74.32 |    2.00x |
+| Thread Pool (8T)                           |       26 |      75.16 |    2.38x |
+| Thread Pool (22T)                          |       24 |      75.84 |    2.58x |
+| Fork/Join                                  |       28 |      74.32 |    2.21x |
+| CompletableFuture (1T)                     |       63 |      73.44 |    0.98x |
+| CompletableFuture (2T)                     |       40 |      73.50 |    1.55x |
+| CompletableFuture (4T)                     |       30 |      74.36 |    2.07x |
+| CompletableFuture (8T)                     |       25 |      75.83 |    2.48x |
+| CompletableFuture (22T)                    |       25 |      76.11 |    2.48x |
+------------------------------------------------------------------------------
+
+Correctness reference -> images/out/photo_1920x1080_sequential.jpg
+
+=== ZGC ===
+Loading image: images/in/photo_1920x1080.jpg
+Image: 1920 x 1080  (2,073,600 pixels)
+
+Available processors: 22
+
+  Benchmarking: Sequential ... 71 ms
+  Benchmarking: Multithreaded - no pool (1T) ... 59 ms
+  Benchmarking: Multithreaded - no pool (2T) ... 38 ms
+  Benchmarking: Multithreaded - no pool (4T) ... 35 ms
+  Benchmarking: Multithreaded - no pool (8T) ... 27 ms
+  Benchmarking: Multithreaded - no pool (22T) ... 27 ms
+  Benchmarking: Thread Pool (1T) ... 61 ms
+  Benchmarking: Thread Pool (2T) ... 38 ms
+  Benchmarking: Thread Pool (4T) ... 31 ms
+  Benchmarking: Thread Pool (8T) ... 27 ms
+  Benchmarking: Thread Pool (22T) ... 26 ms
+  Benchmarking: Fork/Join ... 27 ms
+  Benchmarking: CompletableFuture (1T) ... 61 ms
+  Benchmarking: CompletableFuture (2T) ... 38 ms
+  Benchmarking: CompletableFuture (4T) ... 29 ms
+  Benchmarking: CompletableFuture (8T) ... 26 ms
+  Benchmarking: CompletableFuture (22T) ... 26 ms
+
+------------------------------------------------------------------------------
+| Implementation                             | Time(ms) |    Mem(MB) |  Speedup |
+------------------------------------------------------------------------------
+| Sequential                                 |       71 |     112.00 |    1.00x |
+| Multithreaded - no pool (1T)               |       59 |     114.80 |    1.20x |
+| Multithreaded - no pool (2T)               |       38 |     115.60 |    1.87x |
+| Multithreaded - no pool (4T)               |       35 |     122.00 |    2.03x |
+| Multithreaded - no pool (8T)               |       27 |     127.60 |    2.63x |
+| Multithreaded - no pool (22T)              |       27 |     132.40 |    2.63x |
+| Thread Pool (1T)                           |       61 |     113.20 |    1.16x |
+| Thread Pool (2T)                           |       38 |     112.80 |    1.87x |
+| Thread Pool (4T)                           |       31 |     113.60 |    2.29x |
+| Thread Pool (8T)                           |       27 |     114.40 |    2.63x |
+| Thread Pool (22T)                          |       26 |     112.40 |    2.73x |
+| Fork/Join                                  |       27 |     123.20 |    2.63x |
+| CompletableFuture (1T)                     |       61 |     113.60 |    1.16x |
+| CompletableFuture (2T)                     |       38 |     113.20 |    1.87x |
+| CompletableFuture (4T)                     |       29 |     113.60 |    2.45x |
+| CompletableFuture (8T)                     |       26 |     113.60 |    2.73x |
+| CompletableFuture (22T)                    |       26 |     113.20 |    2.73x |
+------------------------------------------------------------------------------
+
+Correctness reference -> images/out/photo_1920x1080_sequential.jpg
+

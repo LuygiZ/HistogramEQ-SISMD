@@ -86,12 +86,6 @@
 
 \maketitle
 
-\begin{versionhistory}
-    \vhEntry{1}{2026-05-11}{Luis Manuel Nazário Mendes Santos}{Versão inicial do relatório}
-    \vhEntry{2}{2026-05-11}{Luis Manuel Nazário Mendes Santos}{Implementações paralelas e benchmark}
-    \vhEntry{3}{2026-05-11}{Luis Manuel Nazário Mendes Santos}{Análise de GC e conclusões}
-\end{versionhistory}
-
 \cleardoublepage
 
 \tableofcontents
@@ -127,20 +121,20 @@ Neste projeto, implementa-se a equalização de histograma em Java, explorando d
     \centering
     \begin{subfigure}[b]{0.45\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{../../src.jpg}
+        \includegraphics[width=\textwidth]{../../images/in/src.jpg}
         \caption{Imagem original}
     \end{subfigure}
     \hfill
     \begin{subfigure}[b]{0.45\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{../../output_sequential.jpg}
-        \caption{Imagem após equalização}
+        \includegraphics[width=\textwidth]{../../images/out/src_sequential.jpg}
+        \caption{Imagem após equalização sequencial}
     \end{subfigure}
-    \caption{Efeito visual da equalização de histograma}
+    \caption{Efeito visual da equalização de histograma (imagem 860×1276)}
     \label{fig:before_after}
 \end{figure}
 
-A imagem utilizada tem dimensões 860×1276 píxeis (1~097~360 píxeis no total), e os testes foram executados numa máquina com 22 processadores lógicos.
+Os testes foram executados numa máquina com \textbf{22 processadores lógicos}. O conjunto de imagens de teste cobre quatro dimensões distintas para análise de escalabilidade: 512×512 (262~144 px), 860×1276 (1~097~360 px), 1920×1080 (2~073~600 px) e 3840×2160 (8~294~400 px).
 
 O algoritmo de equalização é dividido em três fases:
 \begin{enumerate}
@@ -324,46 +318,72 @@ int[] hist = CompletableFuture
 
 % ============================================================
 \section{Tuning do Garbage Collector}
+\label{sec:gc}
 % ============================================================
 
-O benchmark foi executado com quatro \textit{Garbage Collectors} distintos da JVM para avaliar o seu impacto no desempenho da aplicação. Os logs foram gerados com a flag \texttt{-Xlog:gc:<ficheiro>.log:time,uptime,level,tags}.
+O benchmark foi executado separadamente com quatro \textit{Garbage Collectors} da JVM (\texttt{-Xms256m -Xmx2g}), usando a imagem 1920×1080 como referência. Os logs de pausas foram capturados com \texttt{-Xlog:gc:<ficheiro>.log}.
 
 \subsection{Garbage Collectors Avaliados}
 
-\textbf{Serial GC} (\texttt{-XX:+UseSerialGC}): Usa uma única thread para todas as operações de GC. As pausas são stop-the-world de longa duração (até 69~ms nos logs obtidos). Não é adequado para aplicações multithreaded.
+\textbf{Serial GC} (\texttt{-XX:+UseSerialGC}): Usa uma única thread de GC, com pausas \textit{stop-the-world} longas (média 32~ms, máx. 69~ms). Surpreendentemente, produz o \textbf{menor tempo de execução} neste benchmark (43~ms sequencial, 8~ms melhor paralelo) porque não tem threads concorrentes a competir com a aplicação nem \textit{write barriers} complexas.
 
-\textbf{Parallel GC} (\texttt{-XX:+UseParallelGC}): Usa múltiplas threads para operações de GC, reduzindo o tempo de pausa. As pausas Full GC ficaram entre 23 e 41~ms. Optimizado para throughput, sacrificando latência.
+\textbf{Parallel GC} (\texttt{-XX:+UseParallelGC}): Múltiplas threads de GC reduzem a pausa média para 12.6~ms (máx. 40.9~ms). Tempo de execução comparável ao Serial GC (41~ms sequencial). Optimizado para throughput, à custa de maior variância nas pausas.
 
-\textbf{G1GC} (\texttt{-XX:+UseG1GC}): Divide a heap em regiões e recolhe as mais rentáveis primeiro (\textit{Garbage First}). As pausas Young ficaram entre 3 e 10~ms; as pausas Full (provocadas pelo \texttt{System.gc()} do benchmark) entre 7 e 10~ms. Mantém o heap em torno de 38--42~MB de forma consistente.
+\textbf{G1GC} (\texttt{-XX:+UseG1GC}): Divide a heap em regiões e recolhe as mais rentáveis primeiro. Pausas curtas e previsíveis (média 7.9~ms, máx. 10.8~ms). Contudo, o overhead da gestão de regiões e das \textit{write barriers} aumenta o tempo sequencial para 62~ms (+44\% face ao Serial GC).
 
-\textbf{ZGC} (\texttt{-XX:+UseZGC}): GC de baixa latência com recolha maioritariamente concorrente (sem pausas stop-the-world significativas). No entanto, o overhead de manutenção de barreiras de escrita e leitura concorrentes aumentou o tempo sequencial de 22--24~ms para 32~ms, e o consumo de memória foi mais elevado (60--80~MB).
+\textbf{ZGC} (\texttt{-XX:+UseZGC}): Recolha maioritariamente concorrente — sem pausas \textit{stop-the-world} significativas. No entanto, os threads de marcação concorrentes disputam os 22 núcleos com a aplicação, elevando o tempo sequencial para 71~ms (+65\% face ao Serial GC) e a memória consumida para ~112--132~MB.
 
-\subsection{Resultados e Escolha}
+\subsection{Resultados}
 
 \begin{table}[H]
     \centering
-    \caption{Comparação de Garbage Collectors (sequencial / melhor paralelo)}
+    \caption{Comparação de GCs — imagem 1920×1080 (\texttt{-Xms256m -Xmx2g})}
     \label{tab:gc_comparison}
-    \begin{tabular}{lcccc}
+    \begin{tabular}{lrrrrrr}
         \toprule
-        \textbf{GC} & \textbf{Tempo Seq. (ms)} & \textbf{Melhor (ms)} & \textbf{Pausa Max. (ms)} & \textbf{Mem. Média (MB)} \\
+        \textbf{GC} & \textbf{Seq. (ms)} & \textbf{Melhor (ms)} & \textbf{Speedup máx.} & \textbf{Eventos GC} & \textbf{Pausa média} & \textbf{Pausa máx.} \\
         \midrule
-        Serial GC   & 23 & 5  & 69  & 38--56 \\
-        Parallel GC & 21 & 5  & 41  & 38--66 \\
-        G1GC        & 22 & 5  & 11  & 38--43 \\
-        ZGC         & 32 & 13 & N/A & 58--80 \\
+        Serial GC   & \textbf{43} &  \textbf{8} & \textbf{5.38×} & 121 & 32.0~ms & 69.1~ms \\
+        Parallel GC &          41 &          10 &          4.10× & 176 & 12.6~ms & 40.9~ms \\
+        G1GC        &          62 &          24 &          2.58× & 105 &  7.9~ms & 10.8~ms \\
+        ZGC         &          71 &          26 &          2.73× & $\approx$0 & $\approx$0~ms & $\approx$0~ms \\
         \bottomrule
     \end{tabular}
 \end{table}
 
-\textbf{Configuração escolhida: G1GC.} O G1GC apresentou o melhor equilíbrio entre latência de pausa (máximo de ~11~ms) e throughput (tempo sequencial de 22~ms, idêntico ao Parallel GC). O Serial GC é inadequado para código paralelo pois as suas pausas longas interrompem todas as threads da aplicação. O ZGC, apesar de pausas mínimas, introduz overhead nas operações de leitura e escrita que prejudicou o desempenho global neste tipo de carga de trabalho.
+As Figuras~\ref{fig:gc_timing} e~\ref{fig:gc_pauses} ilustram graficamente os dados acima.
 
-Os parâmetros utilizados em produção:
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.82\textwidth]{../../images/charts/chart_04_gc_timing.png}
+    \caption{Tempo sequencial e melhor paralelo por Garbage Collector}
+    \label{fig:gc_timing}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.82\textwidth]{../../images/charts/chart_05_gc_pauses.png}
+    \caption{Estatísticas de pausa GC por coletor (benchmark completo)}
+    \label{fig:gc_pauses}
+\end{figure}
+
+\subsection{Análise e Escolha}
+
+O resultado mais contraintuitivo é que o \textbf{SerialGC produz o melhor throughput} apesar de ter as pausas mais longas. A razão é que as pausas ocorrem \emph{entre} medições (no \texttt{rt.gc()} explícito do benchmark), enquanto o que afeta o tempo medido é o overhead do GC durante a execução do filtro: \textit{write barriers}, alocação de regiões e threads de fundo concorrentes. O Serial GC não tem nenhum destes.
+
+O \textbf{ZGC} é o polo oposto: zero pausas STW, mas threads de marcação concorrentes que disputam os 22 núcleos com a aplicação --- um custo desproporcionado para uma carga de trabalho \textit{compute-heavy} e de curta duração.
+
+\textbf{Recomendação:}
+\begin{itemize}
+    \item \textbf{Processamento batch (máximo throughput):} Serial GC ou Parallel GC.
+    \item \textbf{Serviço interativo (latência previsível):} G1GC com \texttt{-XX:MaxGCPauseMillis=100}.
+    \item \textbf{Serviço de baixa latência com heap grande:} ZGC (não adequado para este workload).
+\end{itemize}
+
+Para este projeto, adota-se \textbf{G1GC} como configuração de referência por ser o padrão do JDK moderno e oferecer pausas previsíveis aceitáveis para uso interativo:
 \begin{Verbatim}
--XX:+UseG1GC
--XX:MaxGCPauseMillis=200
--XX:G1HeapRegionSize=4m
--Xms256m -Xmx2g
+-XX:+UseG1GC -XX:MaxGCPauseMillis=200
+-XX:G1HeapRegionSize=4m -Xms256m -Xmx2g
 \end{Verbatim}
 
 % ============================================================
@@ -416,96 +436,134 @@ A opção por histogramas parciais por thread (sem \texttt{synchronized} nem \te
 \section{Configuração do Ambiente}
 
 \begin{itemize}
-    \item \textbf{JVM:} Java 21, G1GC (\texttt{-Xms256m -Xmx2g})
-    \item \textbf{Imagem:} 860 × 1276 píxeis (1~097~360 píxeis)
-    \item \textbf{Processadores:} 22 lógicos
-    \item \textbf{Metodologia:} 3 execuções de aquecimento (JIT), média de 5 medições com \texttt{System.nanoTime()}
+    \item \textbf{JVM:} Java 21, sem flag explícita de GC (secção~\ref{sec:gc})
+    \item \textbf{Imagens de teste:} 512×512, 860×1276, 1920×1080, 3840×2160
+    \item \textbf{Processadores:} 22 lógicos (\texttt{Runtime.getRuntime().availableProcessors()})
+    \item \textbf{Threads testadas:} 1, 2, 4, 8, 22
+    \item \textbf{Metodologia:} 3 execuções de aquecimento (JIT) + média de 5 medições com \texttt{System.nanoTime()}
 \end{itemize}
 
-\section{Resultados}
+% ─────────────────────────────────────────────────────────────
+\section{Resultados Globais (imagem 860×1276)}
+% ─────────────────────────────────────────────────────────────
 
 \begin{table}[H]
     \centering
-    \caption{Resultados completos do benchmark (G1GC, imagem 860×1276)}
+    \caption{Benchmark completo — imagem 860×1276 (1~097~360 píxeis)}
     \label{tab:benchmark}
     \begin{tabular}{lrrr}
         \toprule
         \textbf{Implementação} & \textbf{Tempo (ms)} & \textbf{Memória (MB)} & \textbf{Speedup} \\
         \midrule
-        Sequential                      & 24 & 38.20 & 1.00× \\
+        Sequential                      & 33 & 40.29 & 1.00× \\
         \midrule
-        Multithreaded -- 1 thread       & 22 & 39.97 & 1.09× \\
-        Multithreaded -- 2 threads      & 18 & 39.76 & 1.33× \\
-        Multithreaded -- 4 threads      & 10 & 39.85 & 2.40× \\
-        Multithreaded -- 8 threads      & 14 & 40.71 & 1.71× \\
-        Multithreaded -- 22 threads     & 12 & 40.39 & 2.00× \\
+        Multithreaded -- 1 thread       & 24 & 39.92 & 1.38× \\
+        Multithreaded -- 2 threads      & 16 & 40.32 & 2.06× \\
+        Multithreaded -- 4 threads      &  9 & 40.36 & 3.67× \\
+        Multithreaded -- 8 threads      &  6 & 42.00 & \textbf{5.50×} \\
+        Multithreaded -- 22 threads     &  7 & 54.05 & 4.71× \\
         \midrule
-        Thread Pool -- 1 thread         & 22 & 38.35 & 1.09× \\
-        Thread Pool -- 2 threads        & 13 & 38.57 & 1.85× \\
-        Thread Pool -- 4 threads        &  9 & 39.58 & 2.67× \\
-        Thread Pool -- 8 threads        &  7 & 39.49 & 3.43× \\
-        Thread Pool -- 22 threads       &  6 & 40.13 & 4.00× \\
+        Thread Pool -- 1 thread         & 24 & 38.04 & 1.38× \\
+        Thread Pool -- 2 threads        & 14 & 38.50 & 2.36× \\
+        Thread Pool -- 4 threads        &  9 & 39.65 & 3.67× \\
+        Thread Pool -- 8 threads        &  9 & 39.44 & 3.67× \\
+        Thread Pool -- 22 threads       &  7 & 40.01 & 4.71× \\
         \midrule
-        Fork/Join                       &  7 & 39.49 & 3.43× \\
+        Fork/Join                       &  7 & 39.30 & 4.71× \\
         \midrule
-        CompletableFuture -- 1 thread   & 23 & 38.04 & 1.04× \\
-        CompletableFuture -- 2 threads  & 13 & 38.67 & 1.85× \\
-        CompletableFuture -- 4 threads  &  9 & 39.85 & 2.67× \\
-        CompletableFuture -- 8 threads  &  7 & 39.67 & 3.43× \\
-        CompletableFuture -- 22 threads &  6 & 39.74 & 4.00× \\
+        CompletableFuture -- 1 thread   & 23 & 38.04 & 1.43× \\
+        CompletableFuture -- 2 threads  & 14 & 38.76 & 2.36× \\
+        CompletableFuture -- 4 threads  & 10 & 39.77 & 3.30× \\
+        CompletableFuture -- 8 threads  &  7 & 39.12 & 4.71× \\
+        CompletableFuture -- 22 threads &  6 & 40.02 & \textbf{5.50×} \\
         \bottomrule
     \end{tabular}
 \end{table}
 
-\section{Eficiência e Ganhos}
+O melhor speedup obtido é de \textbf{5.50×} (Multithreaded 8T e CompletableFuture 22T), partindo de 33~ms sequenciais até 6~ms. A Figura~\ref{fig:speedup_threads} ilustra a evolução do speedup com o número de threads para as três implementações paralelizáveis.
 
-A solução sequencial demora 24~ms. As melhores implementações paralelas atingem 6~ms, um \textit{speedup} de \textbf{4×}. Este valor está abaixo do máximo teórico de Amdahl --- com 22 processadores, seria possível um speedup muito superior se o algoritmo fosse completamente paralelizável. A limitação deve-se a:
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{../../images/charts/chart_01_speedup_threads.png}
+    \caption{Speedup por número de threads (imagem 860×1276)}
+    \label{fig:speedup_threads}
+\end{figure}
 
-\begin{itemize}
-    \item \textbf{Fase 2 sequencial}: O histograma cumulativo (O(256)) é intrínsecamente sequencial e constitui uma barreira entre as fases 1 e 3.
-    \item \textbf{Overhead de coordenação}: Para imagens de tamanho moderado (~1M píxeis), o custo de criar/gerir threads, fazer \textit{fork/join} ou lançar \texttt{CompletableFuture} representa uma fração relevante do tempo total.
-    \item \textbf{Pressão de memória}: A imagem ocupa ~38~MB. Com muitos threads, o acesso concorrente à memória pode introduzir contenção no bus de memória e \textit{cache misses}.
-\end{itemize}
+Nota-se que o Multithreaded sem pool atinge o pico em 8 threads e regride ligeiramente para 22, enquanto o CompletableFuture continua a ganhar até 22 threads, evidenciando que o overhead de gestão do pool de tarefas é amortizado de forma diferente em cada abstração.
 
-\section{Escalabilidade}
+% ─────────────────────────────────────────────────────────────
+\section{Escalabilidade por Dimensão de Imagem}
+% ─────────────────────────────────────────────────────────────
+
+A Figura~\ref{fig:time_by_size} mostra que o tempo sequencial cresce aproximadamente de forma linear com o número de píxeis --- o que é esperado, pois o algoritmo é O(N).
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.80\textwidth]{../../images/charts/chart_02_time_by_size.png}
+    \caption{Tempo sequencial em função da dimensão da imagem}
+    \label{fig:time_by_size}
+\end{figure}
 
 \begin{table}[H]
     \centering
-    \caption{Escalabilidade com número de threads (Thread Pool e CompletableFuture)}
-    \label{tab:scalability}
-    \begin{tabular}{crrrr}
+    \caption{Escalabilidade: tempo sequencial e melhor speedup por dimensão}
+    \label{tab:scalability_size}
+    \begin{tabular}{lrrrr}
         \toprule
-        \textbf{Threads} & \multicolumn{2}{c}{\textbf{Thread Pool}} & \multicolumn{2}{c}{\textbf{CompletableFuture}} \\
-        \cmidrule(lr){2-3} \cmidrule(lr){4-5}
-        & Tempo (ms) & Speedup & Tempo (ms) & Speedup \\
+        \textbf{Imagem} & \textbf{Píxeis} & \textbf{Seq. (ms)} & \textbf{Melhor (ms)} & \textbf{Speedup máx.} \\
         \midrule
-        1  & 22 & 1.09× & 23 & 1.04× \\
-        2  & 13 & 1.85× & 13 & 1.85× \\
-        4  &  9 & 2.67× &  9 & 2.67× \\
-        8  &  7 & 3.43× &  7 & 3.43× \\
-        22 &  6 & 4.00× &  6 & 4.00× \\
+        512×512      &    262~144 &   9 &  3 & 3.00× (TP/CF 8T) \\
+        860×1276     &  1~097~360 &  33 &  6 & 5.50× (MT 8T, CF 22T) \\
+        1920×1080    &  2~073~600 &  54 & 18 & 3.00× (MT 22T) \\
+        3840×2160    &  8~294~400 & 216 & 79 & 2.73× (TP 22T) \\
         \bottomrule
     \end{tabular}
 \end{table}
 
-O \textit{speedup} cresce de forma sub-linear com o número de threads, como previsto pela Lei de Amdahl. A partir de 8 threads, os ganhos diminuem significativamente --- com 22 threads, o tempo (6~ms) é apenas marginalmente melhor do que com 8 threads (7~ms). Isto sugere que a fração paralelizável do algoritmo está próxima de saturar.
+A Figura~\ref{fig:speedup_by_size} compara o melhor speedup de cada implementação para as quatro dimensões:
 
-\section{Overhead de Coordenação}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.90\textwidth]{../../images/charts/chart_03_speedup_by_size.png}
+    \caption{Melhor speedup por implementação e dimensão de imagem}
+    \label{fig:speedup_by_size}
+\end{figure}
 
-Ao comparar o Multithreaded sem pool com o Thread Pool com 1 thread, o Thread Pool apresenta um overhead ligeiramente superior ao Sequential (22~ms vs. 24~ms). Isto deve-se ao custo de submissão de tarefas ao \texttt{ExecutorService}. A partir de 2 threads, o Thread Pool supera claramente o Multithreaded sem pool, evidenciando que a reutilização de threads compensa o overhead de gestão do pool quando há múltiplas fases de paralelismo.
+Observa-se um padrão não-monotónico: o speedup \textbf{cresce} da imagem pequena para a média (512→860×1276), mas \textbf{decresce} para as imagens grandes. Isto explica-se por dois fenómenos opostos:
 
-O Fork/Join apresenta 3.43× de speedup sem necessidade de especificar o número de threads, delegando a decisão ao runtime. Para imagens maiores, este mecanismo de \textit{work stealing} tornaria o Fork/Join ainda mais competitivo.
+\begin{itemize}
+    \item \textbf{Imagens pequenas (512×512):} o overhead de threading é comparável ao trabalho útil --- o speedup máximo é apenas 3× apesar de 8 threads disponíveis.
+    \item \textbf{Sweet spot (~1M píxeis):} o trabalho por thread é suficiente para amortizar os overheads; Multithreaded 8T e CF 22T atingem \textbf{5.50×}.
+    \item \textbf{Imagens grandes (4K, 8.3M px):} todas as implementações a 22 threads convergem para ~79--82~ms. O bottleneck desloca-se da CPU para a \textbf{largura de banda de memória} --- a Lei de Amdahl aplicada a recursos de hardware, não apenas ao código.
+\end{itemize}
 
-\section{Análise de Memória}
+A Figura~\ref{fig:time_threads_fhd} detalha o comportamento para Full~HD (2.1M píxeis), onde o Fork/Join degrada visivelmente:
 
-O consumo de memória mantém-se consistente entre implementações (~38--41~MB), refletindo principalmente o tamanho da imagem em memória. O ligeiro aumento nas implementações paralelas (~2~MB) deve-se aos arrays de histogramas parciais criados por thread. Não foram observadas fugas de memória --- o \texttt{ExecutorService} é encerrado com \texttt{shutdown()} em \texttt{finally}, e o \texttt{ForkJoinPool} é fechado via \textit{try-with-resources}.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{../../images/charts/chart_06_time_threads_fhd.png}
+    \caption{Tempo de execução por número de threads (imagem 1920×1080)}
+    \label{fig:time_threads_fhd}
+\end{figure}
 
+O Fork/Join apresenta 30~ms nesta imagem, contra 18~ms do Multithreaded manual. Com 1080 linhas e \texttt{THRESHOLD=32}, o framework cria $\lceil 1080/32 \rceil = 34$ tarefas-folha, sobrecarregando o \textit{work-stealing scheduler} para uma granularidade que não justifica a divisão recursiva.
+
+% ─────────────────────────────────────────────────────────────
+\section{Overhead de Abstração e Memória}
+% ─────────────────────────────────────────────────────────────
+
+O CompletableFuture com 1 thread é consistentemente mais lento do que o Sequential em imagens grandes: 74~ms vs. 54~ms em Full~HD ($-$37\%), e 246~ms vs. 216~ms em 4K ($-$14\%). O overhead de \texttt{supplyAsync}, \texttt{allOf} e \texttt{thenApply} não é desprezável quando o trabalho útil por tarefa é pequeno.
+
+O consumo de memória mantém-se estável entre implementações (~38--42~MB para a imagem 860×1276, ~76~MB para Full~HD, ~301~MB para 4K), refletindo maioritariamente o tamanho da imagem. O Multithreaded a 22T apresenta ~54~MB na imagem 860×1276 (+34\% face ao Sequential) devido à criação de 22 arrays \texttt{int[256]} de histograma parcial --- overhead de apenas ~22 KB, mas que fica visível na medição por diferença de heap.
+
+% ─────────────────────────────────────────────────────────────
 \section{Bottlenecks Identificados}
+% ─────────────────────────────────────────────────────────────
 
 \begin{enumerate}
-    \item \textbf{Fase sequencial obrigatória (histograma cumulativo):} Embora O(256), introduz uma barreira que impede a fusão das fases 1 e 3 numa única passagem paralela.
-    \item \textbf{Granularidade de tarefas:} Para imagens de ~1M píxeis e 22 threads, cada thread processa apenas ~50k píxeis. O overhead relativo de lançar e sincronizar threads torna-se significativo.
-    \item \textbf{Criação de objetos \texttt{Color}:} A fase 3 cria um novo objeto \texttt{Color} por píxel (~1M objetos por execução). Isto pressiona o GC e é um bottleneck independente do grau de paralelismo.
+    \item \textbf{Barreira sequencial (fase 2):} O histograma cumulativo (O(256)) é intrínsecamente sequencial e separa a fase 1 da fase 3, impedindo um pipeline contínuo.
+    \item \textbf{Saturação de memória em 4K:} A 8.3M píxeis e 22 threads, adicionar mais cores não reduz o tempo --- todos os threads disputam o mesmo barramento de memória.
+    \item \textbf{Criação de objetos \texttt{Color}:} A fase 3 instancia um \texttt{Color} por píxel (até 8.3M objetos por execução), pressionando o GC de forma independente do grau de paralelismo. Substituir por arrays \texttt{int[]} reduziria este custo.
 \end{enumerate}
 
 % ============================================================
@@ -514,17 +572,53 @@ O consumo de memória mantém-se consistente entre implementações (~38--41~MB)
 
 \section{Síntese dos Resultados}
 
-Este projeto demonstrou que a paralelização da equalização de histograma produz ganhos reais mas limitados pela estrutura do algoritmo. O melhor \textit{speedup} obtido foi de \textbf{4×} (de 24~ms para 6~ms), com Thread Pool de 22 threads e CompletableFuture de 22 threads, numa máquina de 22 processadores.
+Este projeto demonstrou que a paralelização da equalização de histograma produz ganhos reais, mas limitados pela estrutura do algoritmo e pelos recursos de hardware. Os resultados principais são:
 
-O \textbf{Fork/Join} destacou-se pela ausência de configuração explícita de threads e pelo comportamento estável, sendo particularmente adequado para algoritmos de \textit{divide-and-conquer} como o histograma. O \textbf{CompletableFuture} ofereceu código mais expressivo e declarativo sem penalidade de desempenho face ao Thread Pool. O \textbf{Multithreaded manual} demonstrou os desafios de gestão de threads e a importância de evitar contenção, mas ficou aquém do Thread Pool a partir de 4 threads.
+\begin{itemize}
+    \item O melhor speedup absoluto foi de \textbf{5.50×} (Multithreaded 8T e CompletableFuture 22T na imagem 860×1276, 33~ms~→~6~ms) numa máquina de 22 processadores.
+    \item O \textbf{sweet spot} da paralelização situa-se em imagens de ~1M píxeis: grande o suficiente para amortizar o overhead de threading, pequeno o suficiente para caber em cache.
+    \item Em imagens 4K (8.3M px), todas as implementações a 22T convergem para ~79--82~ms, limitadas pela \textbf{largura de banda de memória}, não pela capacidade de processamento.
+    \item O \textbf{CompletableFuture com 1 thread é mais lento que o Sequential} em imagens grandes (overhead de 14--37\%), ilustrando que abstrações assíncronas têm custo real quando o trabalho por tarefa é pequeno.
+    \item O \textbf{Fork/Join degrada em Full~HD} (30~ms vs. 18~ms Multithreaded): o THRESHOLD=32 linhas cria granularidade excessiva para 1080 linhas, sobrecarregando o work-stealing scheduler.
+\end{itemize}
+
+\section{Comparação das Implementações}
+
+\begin{table}[H]
+    \centering
+    \caption{Comparação qualitativa das implementações}
+    \label{tab:qualitative}
+    \begin{tabular}{lllll}
+        \toprule
+        \textbf{Implementação} & \textbf{Throughput} & \textbf{Escalabilidade} & \textbf{Complexidade} & \textbf{Overhead} \\
+        \midrule
+        Sequential       & Baseline  & N/A         & Muito baixa & Nenhum \\
+        Multithreaded    & Alto      & Boa até 8T  & Média       & Baixo \\
+        Thread Pool      & Alto      & Boa até 22T & Média       & Baixo \\
+        Fork/Join        & Médio-alto & Variável   & Alta        & Médio \\
+        CompletableFuture & Alto     & Boa até 22T & Média       & Médio-alto (1T) \\
+        \bottomrule
+    \end{tabular}
+\end{table}
 
 \section{Garbage Collector}
 
-O \textbf{G1GC} foi o GC mais equilibrado para esta carga de trabalho, com pausas máximas de ~11~ms e tempo sequencial competitivo. O ZGC, apesar de pausas mínimas, introduziu overhead de barreira que penalizou todas as implementações. Para aplicações de processamento de imagem que criam muitos objetos \texttt{Color} por execução, o G1GC oferece o melhor compromisso entre latência e throughput.
+O resultado mais surpreendente foi que o \textbf{Serial GC produz o melhor throughput} para este workload (43~ms sequential, 8~ms melhor paralelo), apesar de ter as pausas individuais mais longas. A causa é que o overhead do GC que afeta o tempo \emph{medido} é diferente das pausas STW: write barriers, threads de fundo concorrentes e overhead de alocação --- o Serial GC minimiza todos estes durante a execução da aplicação.
 
-\section{Reflexão}
+O \textbf{ZGC} é o pior para workloads compute-heavy de curta duração: os seus threads de marcação concorrentes disputam os 22 núcleos com a aplicação, penalizando +65\% o tempo sequencial.
 
-A Lei de Amdahl explica o comportamento observado: com uma fração sequencial de ~5\% (histograma cumulativo + overhead fixo), o speedup máximo teórico é ~15×. O speedup obtido de 4× indica que há ainda espaço para otimização --- nomeadamente ao substituir os objetos \texttt{Color} por arrays de inteiros raw, eliminando a pressão no GC durante a fase 3.
+O \textbf{G1GC} é adotado como configuração de referência por ser o padrão do JDK moderno e oferecer pausas previsíveis adequadas para uso interativo.
+
+\section{Reflexão e Otimizações Futuras}
+
+A \textbf{Lei de Amdahl} explica o comportamento observado: a fase do histograma cumulativo (O(256)) é intrínsecamente sequencial e constitui o teto teórico do speedup. Com uma fração sequencial estimada de ~5\%, o speedup máximo teórico seria ~15×; o valor obtido de 5.5× indica que overhead adicional (coordenação, memória, GC) reduz o speedup real para ~37\% do teórico.
+
+Otimizações que aumentariam o speedup:
+\begin{enumerate}
+    \item \textbf{Substituir \texttt{Color[][]} por \texttt{int[][]}:} elimina 8.3M alocações de objeto por execução em 4K, reduzindo drasticamente a pressão no GC.
+    \item \textbf{Ajustar o THRESHOLD do Fork/Join} por imagem --- um THRESHOLD dinâmico baseado em \texttt{rows / (2 * cores)} daria granularidade óptima independentemente da dimensão.
+    \item \textbf{Processamento por blocos (tiling):} melhorar a localidade de cache processando blocos 2D em vez de fatias de linhas, especialmente benéfico em imagens largas.
+\end{enumerate}
 
 % ============================================================
 \bibliographystyle{ACM-Reference-Format}

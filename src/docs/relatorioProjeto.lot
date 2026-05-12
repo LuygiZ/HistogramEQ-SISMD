@@ -3,11 +3,12 @@
 \addvspace {10\p@ }
 \addvspace {10\p@ }
 \addvspace {10\p@ }
-\contentsline {table}{\numberline {3.1}{\ignorespaces Comparação de Garbage Collectors (sequencial / melhor paralelo)}}{10}{table.caption.7}%
+\contentsline {table}{\numberline {3.1}{\ignorespaces Comparação de GCs — imagem 1920×1080 (\texttt {-Xms256m -Xmx2g})}}{10}{table.caption.6}%
 \addvspace {10\p@ }
-\contentsline {table}{\numberline {4.1}{\ignorespaces Mecanismos de sincronização por implementação}}{12}{table.caption.8}%
+\contentsline {table}{\numberline {4.1}{\ignorespaces Mecanismos de sincronização por implementação}}{14}{table.caption.9}%
 \addvspace {10\p@ }
-\contentsline {table}{\numberline {5.1}{\ignorespaces Resultados completos do benchmark (G1GC, imagem 860×1276)}}{14}{table.caption.9}%
-\contentsline {table}{\numberline {5.2}{\ignorespaces Escalabilidade com número de threads (Thread Pool e CompletableFuture)}}{15}{table.caption.10}%
+\contentsline {table}{\numberline {5.1}{\ignorespaces Benchmark completo — imagem 860×1276 (1~097~360 píxeis)}}{16}{table.caption.10}%
+\contentsline {table}{\numberline {5.2}{\ignorespaces Escalabilidade: tempo sequencial e melhor speedup por dimensão}}{18}{table.caption.13}%
 \addvspace {10\p@ }
+\contentsline {table}{\numberline {6.1}{\ignorespaces Comparação qualitativa das implementações}}{24}{table.caption.16}%
 \providecommand \tocbasic@end@toc@file {}\tocbasic@end@toc@file 

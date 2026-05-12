@@ -1,8 +1,8 @@
 \babel@toc {english}{}\relax 
 \babel@toc {portuguese}{}\relax 
-\contentsline {chapter}{Lista de Figuras}{vi}{chapter*.2}%
-\contentsline {chapter}{Lista de Tabelas}{vii}{chapter*.3}%
-\contentsline {chapter}{Declaração de Integridade}{xi}{chapter*.5}%
+\contentsline {chapter}{Lista de Figuras}{iv}{chapter*.1}%
+\contentsline {chapter}{Lista de Tabelas}{v}{chapter*.2}%
+\contentsline {chapter}{Declaração de Integridade}{ix}{chapter*.4}%
 \contentsline {chapter}{\numberline {1}Introdução}{1}{chapter.1}%
 \contentsline {chapter}{\numberline {2}Objetivos}{3}{chapter.2}%
 \contentsline {chapter}{\numberline {3}Implementações}{5}{chapter.3}%
@@ -13,22 +13,22 @@
 \contentsline {section}{\numberline {3.5}CompletableFuture}{8}{section.3.5}%
 \contentsline {section}{\numberline {3.6}Tuning do Garbage Collector}{9}{section.3.6}%
 \contentsline {subsection}{\numberline {3.6.1}Garbage Collectors Avaliados}{9}{subsection.3.6.1}%
-\contentsline {subsection}{\numberline {3.6.2}Resultados e Escolha}{10}{subsection.3.6.2}%
-\contentsline {chapter}{\numberline {4}Concorrência e Sincronização}{11}{chapter.4}%
-\contentsline {section}{\numberline {4.1}Estrutura das Fases}{11}{section.4.1}%
-\contentsline {section}{\numberline {4.2}Thread Safety}{11}{section.4.2}%
-\contentsline {section}{\numberline {4.3}Estruturas de Dados e Mecanismos}{12}{section.4.3}%
-\contentsline {chapter}{\numberline {5}Análise de Performance}{13}{chapter.5}%
-\contentsline {section}{\numberline {5.1}Configuração do Ambiente}{13}{section.5.1}%
-\contentsline {section}{\numberline {5.2}Resultados}{14}{section.5.2}%
-\contentsline {section}{\numberline {5.3}Eficiência e Ganhos}{14}{section.5.3}%
-\contentsline {section}{\numberline {5.4}Escalabilidade}{15}{section.5.4}%
-\contentsline {section}{\numberline {5.5}Overhead de Coordenação}{15}{section.5.5}%
-\contentsline {section}{\numberline {5.6}Análise de Memória}{16}{section.5.6}%
-\contentsline {section}{\numberline {5.7}Bottlenecks Identificados}{16}{section.5.7}%
-\contentsline {chapter}{\numberline {6}Conclusões}{17}{chapter.6}%
-\contentsline {section}{\numberline {6.1}Síntese dos Resultados}{17}{section.6.1}%
-\contentsline {section}{\numberline {6.2}Garbage Collector}{17}{section.6.2}%
-\contentsline {section}{\numberline {6.3}Reflexão}{17}{section.6.3}%
-\contentsline {chapter}{Referências}{19}{chapter*.11}%
+\contentsline {subsection}{\numberline {3.6.2}Resultados}{10}{subsection.3.6.2}%
+\contentsline {subsection}{\numberline {3.6.3}Análise e Escolha}{11}{subsection.3.6.3}%
+\contentsline {chapter}{\numberline {4}Concorrência e Sincronização}{13}{chapter.4}%
+\contentsline {section}{\numberline {4.1}Estrutura das Fases}{13}{section.4.1}%
+\contentsline {section}{\numberline {4.2}Thread Safety}{13}{section.4.2}%
+\contentsline {section}{\numberline {4.3}Estruturas de Dados e Mecanismos}{14}{section.4.3}%
+\contentsline {chapter}{\numberline {5}Análise de Performance}{15}{chapter.5}%
+\contentsline {section}{\numberline {5.1}Configuração do Ambiente}{15}{section.5.1}%
+\contentsline {section}{\numberline {5.2}Resultados Globais (imagem 860×1276)}{16}{section.5.2}%
+\contentsline {section}{\numberline {5.3}Escalabilidade por Dimensão de Imagem}{17}{section.5.3}%
+\contentsline {section}{\numberline {5.4}Overhead de Abstração e Memória}{20}{section.5.4}%
+\contentsline {section}{\numberline {5.5}Bottlenecks Identificados}{20}{section.5.5}%
+\contentsline {chapter}{\numberline {6}Conclusões}{23}{chapter.6}%
+\contentsline {section}{\numberline {6.1}Síntese dos Resultados}{23}{section.6.1}%
+\contentsline {section}{\numberline {6.2}Comparação das Implementações}{24}{section.6.2}%
+\contentsline {section}{\numberline {6.3}Garbage Collector}{24}{section.6.3}%
+\contentsline {section}{\numberline {6.4}Reflexão e Otimizações Futuras}{24}{section.6.4}%
+\contentsline {chapter}{Referências}{27}{chapter*.17}%
 \providecommand \tocbasic@end@toc@file {}\tocbasic@end@toc@file 
