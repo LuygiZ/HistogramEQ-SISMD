@@ -8,12 +8,6 @@ import sismd.utils.Utils;
 
 /**
  * Fork/Join implementation using divide-and-conquer.
- *
- * HistogramTask  (RecursiveTask<int[]>) — splits row range recursively until
- *   <= THRESHOLD rows; leaf computes partial histogram sequentially.
- *   Left subtask is forked (async), right runs on current thread, then join+merge.
- *
- * EqualizationTask (RecursiveAction) — same split strategy; invokeAll parallelises both halves.
  */
 public class ForkJoinFilter extends AbstractFilter {
 

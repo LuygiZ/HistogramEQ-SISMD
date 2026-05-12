@@ -101,7 +101,7 @@ Declaro, por este meio, que o presente trabalho académico foi realizado com int
 
 Afirmo não ter recorrido a plágio, falsificação de resultados ou qualquer outra forma de utilização indevida de informação no decurso da sua elaboração.\newline
 
-Assim, o trabalho aqui apresentado é original e da minha autoria, não tendo sido previamente utilizado para outros fins que não os explicitamente reconhecidos. Este documento identifica de forma transparente o modo como foram utilizadas ferramentas de IA, bem como o propósito dessa utilização.\newline
+Assim, o trabalho aqui apresentado é original e da minha autoria, não tendo sido previamente utilizado para outros fins que não os explicitamente reconhecidos. \newline
 
 Confirmo ainda o meu conhecimento e respeito pelo Código de Conduta Ética do P.PORTO.\newline
 
@@ -174,13 +174,13 @@ A estrutura do projeto foi organizada em pacotes Java de acordo com a responsabi
 \chapter{Implementações}
 % ============================================================
 
-Todas as implementações partilham uma interface comum \texttt{HistogramEqualizer} e estendem a classe abstrata \texttt{AbstractFilter}, que disponibiliza os métodos utilitários \texttt{computeLuminosity}, \texttt{buildCumulativeHistogram} e \texttt{equalizedLuminosity}. Os métodos \texttt{computeHistogram} e \texttt{applyEqualization} da \texttt{SequentialFilter} têm visibilidade de pacote (\textit{package-private}) e são reutilizados pelas implementações paralelas como operações de folha.
+Todas as implementações partilham uma interface comum \texttt{HistogramEqualizer} e estendem a classe abstrata \texttt{AbstractFilter}, que disponibiliza os métodos utilitários \texttt{computeLuminosity}, \texttt{buildCumulativeHistogram} e \texttt{equalizedLuminosity}. Os métodos \texttt{computeHistogram} e \texttt{applyEqualization} da \texttt{SequentialFilter} são (\textit{package-private}) e são reutilizados pelas implementações paralelas como operações de folha.
 
 % ============================================================
 \section{Solução Sequencial}
 % ============================================================
 
-A solução sequencial serve como linha de base (\textit{baseline}) para comparação de desempenho. Processa o array de píxeis em três passagens sequenciais correspondentes às três fases do algoritmo.
+A solução sequencial serve como baseline para comparação de desempenho. Processa o array de píxeis em três passagens sequenciais correspondentes às três fases do algoritmo.
 
 \textbf{Justificação:} A implementação sequencial não tem overhead de criação de threads nem de sincronização, pelo que representa o custo mínimo do algoritmo. É indispensável para calcular o \textit{speedup} das implementações paralelas e para verificar a correção dos resultados.
 
@@ -609,16 +609,9 @@ O \textbf{ZGC} é o pior para workloads compute-heavy de curta duração: os seu
 
 O \textbf{G1GC} é adotado como configuração de referência por ser o padrão do JDK moderno e oferecer pausas previsíveis adequadas para uso interativo.
 
-\section{Reflexão e Otimizações Futuras}
+\section{Reflexões do Projeto}
 
 A \textbf{Lei de Amdahl} explica o comportamento observado: a fase do histograma cumulativo (O(256)) é intrínsecamente sequencial e constitui o teto teórico do speedup. Com uma fração sequencial estimada de ~5\%, o speedup máximo teórico seria ~15×; o valor obtido de 5.5× indica que overhead adicional (coordenação, memória, GC) reduz o speedup real para ~37\% do teórico.
-
-Otimizações que aumentariam o speedup:
-\begin{enumerate}
-    \item \textbf{Substituir \texttt{Color[][]} por \texttt{int[][]}:} elimina 8.3M alocações de objeto por execução em 4K, reduzindo drasticamente a pressão no GC.
-    \item \textbf{Ajustar o THRESHOLD do Fork/Join} por imagem --- um THRESHOLD dinâmico baseado em \texttt{rows / (2 * cores)} daria granularidade óptima independentemente da dimensão.
-    \item \textbf{Processamento por blocos (tiling):} melhorar a localidade de cache processando blocos 2D em vez de fatias de linhas, especialmente benéfico em imagens largas.
-\end{enumerate}
 
 % ============================================================
 \bibliographystyle{ACM-Reference-Format}

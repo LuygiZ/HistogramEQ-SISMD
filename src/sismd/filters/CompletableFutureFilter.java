@@ -10,11 +10,6 @@ import sismd.utils.Utils;
 
 /**
  * Asynchronous implementation using CompletableFuture.
- *
- * Phase 1 — supplyAsync launches one task per thread slice; each returns a partial histogram.
- *            allOf waits for all, then thenApply merges them without explicit blocking.
- * Phase 2 — cumulative computed synchronously (O(256)).
- * Phase 3 — runAsync launches equalization tasks; allOf.join() awaits completion.
  */
 public class CompletableFutureFilter extends AbstractFilter {
 

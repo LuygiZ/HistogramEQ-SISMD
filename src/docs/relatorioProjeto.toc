@@ -29,6 +29,6 @@
 \contentsline {section}{\numberline {6.1}Síntese dos Resultados}{23}{section.6.1}%
 \contentsline {section}{\numberline {6.2}Comparação das Implementações}{24}{section.6.2}%
 \contentsline {section}{\numberline {6.3}Garbage Collector}{24}{section.6.3}%
-\contentsline {section}{\numberline {6.4}Reflexão e Otimizações Futuras}{24}{section.6.4}%
-\contentsline {chapter}{Referências}{27}{chapter*.17}%
+\contentsline {section}{\numberline {6.4}Reflexões do Projeto}{24}{section.6.4}%
+\contentsline {chapter}{Referências}{25}{chapter*.17}%
 \providecommand \tocbasic@end@toc@file {}\tocbasic@end@toc@file 

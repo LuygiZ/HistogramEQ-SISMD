@@ -11,9 +11,6 @@ import sismd.utils.Utils;
 
 /**
  * Thread pool implementation using ExecutorService.
- *
- * Same 3-phase approach as MultithreadedFilter but threads are reused from a
- * fixed pool — eliminating thread creation/destruction overhead between phases.
  */
 public class ThreadPoolFilter extends AbstractFilter {
 

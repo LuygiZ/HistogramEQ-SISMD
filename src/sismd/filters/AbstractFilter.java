@@ -2,7 +2,7 @@ package sismd.filters;
 
 public abstract class AbstractFilter implements HistogramEqualizer {
 
-    // Weighted luminosity per ITU-R BT.601 (same formula as professor's Filters.java)
+    // Weighted luminosity
     protected static int computeLuminosity(int r, int g, int b) {
         return (int) Math.round(0.299 * r + 0.587 * g + 0.114 * b);
     }

@@ -5,11 +5,6 @@ import sismd.utils.Utils;
 
 /**
  * Multithreaded implementation without thread pools.
- *
- * Phase 1 — each thread builds a local partial histogram for its row slice (no sync needed).
- * Barrier  — main thread merges all partial histograms after joining.
- * Phase 2  — cumulative histogram is O(256), computed sequentially.
- * Phase 3  — threads rewrite disjoint row slices (no sync needed).
  */
 public class MultithreadedFilter extends AbstractFilter {
 
@@ -34,7 +29,7 @@ public class MultithreadedFilter extends AbstractFilter {
         Thread[]   threads      = new Thread[actualThreads];
         int[][]    partialHists = new int[actualThreads][256];
 
-        // Phase 1: parallel histogram — each thread owns its partial array
+        // Parallel histogram — each thread owns its partial array
         for (int t = 0; t < actualThreads; t++) {
             final int id    = t;
             final int start = id * rows / actualThreads;
